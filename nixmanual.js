@@ -421,6 +421,7 @@ function setup()
     // Activate debug
     toggleDebug();
     
+    // TODO: avoid global variables.
     key = null;
     modifier = null;
 	timer = null;
@@ -484,8 +485,10 @@ function loadSearchPulldowns()
     
     // In case there is no connection we switch to local lookups.
     try{
+
         req.send(null);
         response = req.responseText;
+
         // Uncomment this line for testing.
         // response = testResponseText;
     	if(response)
