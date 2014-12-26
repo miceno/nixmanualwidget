@@ -961,9 +961,9 @@ function remoteLookup(q,a,s,m)
 	req = new XMLHttpRequest();
 	url = "http://www.freebsd.org/cgi/man.cgi?query=" + q + (a ? "&apropos=true" : "") + "&sektion=" + s + "&manpath=" + m + "&format=html";
 	debug(url);
+	req.onreadystatechange = doneRemoteLookup;
 	req.open("GET", url ,true);
 	//req.setRequestHeader("Cache-Control", "no-cache");
-	req.onreadystatechange = doneRemoteLookup;
 	req.send(null);
 }
 
