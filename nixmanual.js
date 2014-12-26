@@ -920,7 +920,7 @@ function doneLocalLookup(s)
 function killLocalLookup()
 {
 	//keep the portion of the manpage already loaded
-	s = command.outpoutString;
+	s = command.outputString;
 	
 	//cancel the lookup
 	command.cancel();
