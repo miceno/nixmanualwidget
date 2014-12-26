@@ -750,10 +750,27 @@ function processRequest(q,linked) {
 		}
 		*/
 		
-		manpathPulldown = document.getElementById('remote_manpath');
-		manpath = manpathPulldown[manpathPulldown.selectedIndex].value;
-		locale  = manpathPulldown.disabled === true;
-		
+		locale  = manpathPulldown.disabled == true;
+        debug("locale: " + locale);
+        manpath = "";
+		if(locale){
+            /* Local lookup parameters */
+			localeCommand = "localLookup('";
+        }
+		else{
+            /* Remote lookup parameters */
+			localeCommand = "remoteLookup('";
+    		manpathPulldown = document.getElementById('remote_manpath');
+            debug("manpathPulldown: " + manpathPulldown);
+            var manpathPulldownSelectedIndex = manpathPulldown.selectedIndex;
+            debug("manpathPulldown index: " + manpathPulldownSelectedIndex);
+            if (manpathPulldownSelectedIndex < 0)
+                manpathPulldownSelectedIndex = 0;
+            debug("manpathPulldown index: " + manpathPulldownSelectedIndex);
+    		manpath = manpathPulldown[manpathPulldownSelectedIndex].value;
+        }
+        debug("manpath: " + manpath);
+        		
 		newID = query  + apropos + section + manpath + locale;
 		
 		//perform search only when not already displayed
@@ -766,16 +783,11 @@ function processRequest(q,linked) {
 				displayStatus("<b>Performing keyword search for '</b><i>" + query + "</i><b>'...</b>", true);
 			else
 				displayStatus("<b>Loading manual entry for '</b><i>" + query + "</i><b>'...</b>", true);
-			
-			if(locale)
-				locale = "localLookup('";
-			else
-				locale = "remoteLookup('";
-			
+						
 			newSearch = true;  //?
 			setTabText(query);
 			
-			lookupString = locale + query + "', " + apropos + ", '" + section + "', '" + manpath + "')";
+			lookupString = localeCommand + query + "', " + apropos + ", '" + section + "', '" + manpath + "')";
 			//alert(lookupString);
 			setTimeout(lookupString, 0);
 			
