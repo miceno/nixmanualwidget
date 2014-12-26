@@ -42,6 +42,7 @@ function toggleDebug() {
 	}
 }
 
+
 /******************************************************************************
  * initialize variables
  *****************************************************************************/
@@ -87,7 +88,7 @@ function setup()
 	document.getElementById('SearchField').onfocus = onFocus;
 	document.getElementById('SearchField').onblur = onBlur;
 
-	clicker = new DoubleClick( "selectionLookup()");
+	clicker = new DoubleClick( "selectionLookup();");
 
 	createGenericButton( document.getElementById('done'), 'Done', hidePrefs);
 	
@@ -220,7 +221,7 @@ function expand_collapse()
 {
 	if(resizing) return;
 	
-	if(document.getElementById('function').innerText === '') return;
+	if(document.getElementById('function').innerText == '') return;
 	
 	document.getElementById('tab').style.display = "block";
 	document.getElementById('SearchField').focus();
@@ -447,7 +448,7 @@ function loadPageFromFile()
 	req.open("GET", "nixmanpage.txt" ,false);
 	req.send(null);
 	
-	if(req.responseText === '')
+	if(req.responseText == '')
 		response = 'No manual entry';
 	else
 	{
@@ -676,7 +677,7 @@ function linkLookup(q, s)
 function selectionLookup()
 {
 	selectedText = window.getSelection();
-	if(selectedText !== '')
+	if(selectedText != '')
 	{	
 		query = selectedText;
 		document.getElementById('SearchField').value = query;
@@ -691,7 +692,7 @@ function selectionLookup()
  *****************************************************************************/
 function highlightKeyword(word, force)
 {
-	if(force || highlightedKeyword != word && word !== '')
+	if(force || highlightedKeyword != word && word != '')
 	{
 		re = new RegExp('((\<[ib]\>)*'+word+'(\<\\[ib]\>)*)', 'gi');
 		debug(re);
@@ -861,9 +862,9 @@ function changeFontsize(e)
 function localeChange(location)
 {
 	manpathPulldown = document.getElementById('remote_manpath');
-	document.getElementById('local').checked = (location === 0);
+	document.getElementById('local').checked = (location == 0);
 
-	if(location === 0)
+	if(location == 0)
 	{
 		manpathPulldown.disabled = true;
 		document.getElementById('remote_settings').style.display = 'none';
@@ -913,7 +914,7 @@ function parseColorset(e)
 {
 	colorset = e[e.selectedIndex].value;
 	
-	if(colorset === "")
+	if(colorset == "")
 		colorset = loadCustomColorset();
 	
 	eval("applyColorset(" + colorset + ");");
@@ -1105,7 +1106,7 @@ function interpretKey(delay, speed, e) {
 						}
 						break;
 				//(sublookup: / )
-				case 191:if(searchID !== '')
+				case 191:if(searchID != '')
 						{
 							subsearch = true;
 							
@@ -1357,7 +1358,7 @@ function mousemove (event)
 	if (!flipShown)		// if the preferences flipper is not already showing...
 	{
 		//reset the timer
-		if (animation.timer !== null)
+		if (animation.timer != null)
 		{
 			clearInterval (animation.timer);
 			animation.timer  = null;
@@ -1385,7 +1386,7 @@ function mouseexit (event)
 	if (flipShown)
 	{
 		// fade in the flip widget
-		if (animation.timer !== null)
+		if (animation.timer != null)
 		{
 			clearInterval (animation.timer);
 			animation.timer  = null;
