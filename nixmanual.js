@@ -510,11 +510,6 @@ function loadSearchPulldowns()
             var manpathElement = dummyDoc.getElementsByName('manpath')[0];            
 
     		document.getElementById('section').innerHTML = sektion.innerHTML;
-            document.getElementById('section').onchange = function(event){
-                selectSection(event.target.options[event.target.selectedIndex].value);
-                document.getElementById('SearchField').focus();
-                document.getElementById('SearchField').select();
-            };
     		document.getElementById('remote_manpath').innerHTML = manpathElement.innerHTML;
     	} else {
             debug("no responseText");
@@ -530,6 +525,12 @@ function loadSearchPulldowns()
 		expand_collapse();
 		runLocally();
     }
+    document.getElementById('section').onchange = function(event){
+        debug('section onchange');
+        selectSection(event.target.options[event.target.selectedIndex].value);
+        document.getElementById('SearchField').focus();
+        document.getElementById('SearchField').select();
+    };
 
 }
 
