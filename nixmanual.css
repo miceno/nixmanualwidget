@@ -1,0 +1,254 @@
+body {
+    margin: 0px;
+}
+
+#front {
+	background-image: url('Images/extender.png');
+	background-repeat: repeat-x;
+	width: 100%;
+	height: 100%;
+}
+
+#background {
+	background-color: #C3CBC2;
+	opacity: .9;
+	position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+#manualtext {
+	font: 10px "Andale Mono";
+    color: #000000;
+	
+	position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;    
+    
+	padding: 5px;
+	border: solid 1px black;
+	border-top: none;
+	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: scroll;
+    -apple-dashboard-region: dashboard-region(control rectangle);
+    -khtml-user-select:text;
+    z-index: 1;
+}
+
+#blind {
+	position: absolute;
+	top: 35px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+}
+
+#section {
+	width: 30px;	
+}
+
+#manpath {
+	width: 180px;
+}
+
+#searchbar {
+    position: absolute;
+    top: 5px;
+    right: 25px;
+}
+
+#commands {
+	z-index: 2000;
+	position: absolute;
+	top: 33px;
+	left: 2px;
+	width: 50px;
+	opacity: 0;
+}
+
+#section_label {
+	position: absolute;
+	top: 5px;
+	right: 170px;
+	font: 20px "Lucida Grande";
+	font-weight: bold;
+	color: #888;
+	text-shadow: black 0px -2px 0px;
+}
+
+#opacity {
+	width: 150px;
+}
+
+.title {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.tab {
+	display: none;
+	position:absolute;
+	top: 34px;
+	left: 0px;
+	z-index: 10;
+}
+
+.header {
+	position: absolute;
+	top: 35px;
+	left: 10px;
+	font: 12px "Arial Black";
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #000000;
+	z-index: 100;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	height: 20px;
+	font: 12px "Arial Black";
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #000000;
+	z-index: 11;
+}
+
+.debug {
+	position: absolute;
+	bottom: 3px;
+	right: 25px;
+	font: 10px "Arial Black";
+    font-weight: bold;
+    color: #ffffff;
+	z-index: 12;
+	text-align: right;
+}
+
+#growbox {
+	position:absolute;
+	right: 18px;
+	bottom: 2px;
+	-apple-dashboard-region: dashboard-region(control rectangle);
+	z-index: 13;
+}
+
+.flip {
+	position:absolute;
+	top: 4px;
+	right: 4px;
+	width:13px;
+	height:13px;
+}
+
+#flip {
+	opacity:100;
+	background: url(file:///System/Library/WidgetResources/ibutton/white_i.png) no-repeat top left;
+	z-index:8000;
+}
+
+#fliprollie {
+	display:none;
+	opacity:0.25;
+	background: url(file:///System/Library/WidgetResources/ibutton/white_rollie.png) no-repeat top left;
+	z-index:7999;
+
+}
+
+#back {
+	display: none;
+} 
+
+.preftable {
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    z-index: 2;
+}
+
+.prefs {
+	font: 10px "Helvetica Neue";
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.hex_input {
+	font-weight: 12px;
+	font-Family: "Courier";
+	color: #000000;
+	border: solid 1px black;
+}
+
+.dark_input {
+	font-weight: 12px;
+	font-Family: "Courier";
+	color: #FFFFFF;
+	border: solid 1px gray;
+	background: #111;
+}
+
+#local_manpath {
+	width: 190px;
+}
+
+#remote_manpath {
+	width: 190px;
+}
+
+.swatch {
+	display: inline-block;
+	vertical-align: middle;
+	margin-bottom: 3px;
+	margin-left: -3;
+	width: 15px;
+	height: 15px;
+	background-color: #C3CBC2;
+	border: solid 1px black;
+}
+
+#hist_size {
+	width: 22px;
+}
+
+td {
+	padding: 1px;
+}
+
+H2 {
+	font-Family: "Helvetica Neue";
+	color: #FFFFFF;
+}
+
+.bsdlogo {
+	position: absolute;
+	top: 225px;
+	left: 325px;
+}
+
+.imlogo {
+	position: absolute;
+	top: 218px;
+	left: 280px;
+}
+
+.doneButton {
+	position: absolute;
+	top: 230px;
+	left: 425px;
+	z-index: 100;
+}
+
+.updateButton {
+	position: absolute;
+	top: 230px;
+	left: 275px;
+}

@@ -1,0 +1,229 @@
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<head>
+
+<style>
+
+    @import "nixmanual.css";
+    
+    .formatted {
+		font-family: Andale Mono;
+		font-size: 10px;
+		font-weight: normal;
+		color: #000000;
+		margin-right: 15px;
+	}
+
+	pre {
+		font-family: Andale Mono;
+		font-size: 10px;
+		font-weight: normal;
+		color: #000000;
+	}
+	
+	b {
+		font-family: "Andale Mono";
+		color: #000000;
+		letter-spacing: -1px;
+	}
+	
+	i {
+		font-weight: bold;
+		color: #113355;
+		letter-spacing: -1px;
+	}
+	
+	.k {
+		font-family: "Andale Mono";
+		color: #000000;
+		background: #FFFFFF;
+	}
+	
+	A:link {text-decoration: underline; font-weight: bold; font-size:10px; color: #115533;}
+	A:hover {text-decoration: underline; font-weight: bold; font-size:10px; color: #FFFFFF;}
+	A:visited {text-decoration: underline; font-weight: bold; font-size:10px; color: #115533;}
+	
+
+</style>
+
+<script type='text/javascript' src='file:///System/Library/WidgetResources/button/genericButton.js' charset='utf-8'/>
+<script type='text/javascript' src="doubleclick.js"/>
+<script type='text/javascript' src="prototype.js"/>
+<script type='text/javascript' src="history.js"/>
+<script type='text/javascript' src="nixmanual.js"/>
+<script language="JavaScript" src="scriptaculous.js?load=effects"></script>
+
+</head>
+
+<body onload="setup();" onmousemove='mousemove(event);' onmouseout='mouseexit(event);'>
+
+    <div id="front">
+
+        <img src="Images/nixmanual.png" class='title' height='35px' width='185px' onclick='expand_collapse();'>
+        
+        <div class='flip' id='fliprollie'></div>
+		<div class='flip' id='flip' onclick='showPrefs(event);' onmouseover='enterflip(event);' onmouseout='exitflip(event)';></div>
+		
+		<div id='header'>
+			<img src="Images/extender.png" width="100%" height="35px" onclick='expand_collapse();'>
+			
+			<div id='section_label'>•</div>
+			<div id='sectiondiv' style='position: absolute; top: 6px; right: 155px; opacity: 0;'>
+				<SELECT id="section" onchange="selectSection(this.options[this.selectedIndex].value);document.getElementById('SearchField').focus();document.getElementById('SearchField').select();">
+					<OPTION VALUE="0">All Sections</OPTION>
+					<OPTION VALUE="1">1 - General Commands</OPTION>
+					<OPTION VALUE="2">2 - System Calls</OPTION>
+					<OPTION VALUE="3">3 - Subroutines</OPTION>
+					<OPTION VALUE="4">4 - Special Files</OPTION>
+					<OPTION VALUE="5">5 - File Formats</OPTION>
+					<OPTION VALUE="6">6 - Games</OPTION>
+					<OPTION VALUE="7">7 - Macros and Conventions</OPTION>
+					<OPTION VALUE="8">8 - Maintenance Commands</OPTION>
+					<OPTION VALUE="9">9 - Kernel Interface</OPTION>
+					<OPTION VALUE="n">n - New Commands</OPTION>
+					<OPTION VALUE="k">k - Keyword Search (apropos)</OPTION>
+				</SELECT>
+			</div>
+			
+			<div id="searchbar" height="150">
+           		<input id='SearchField' type="search" size="18" placeholder="command" autosave="recentPages" results="7" onSearch="processRequest(this.value,0)"/>
+        	</div>
+        
+        	<div id="tab" class='tab'>
+        		<img src="Images/tab.png">
+        	</div>
+        	<span class="header" id='function'></span>
+        </div>
+        
+	   	<div id='panel'>
+	   		<div id='blind' style="display: none;">
+	   			<div class="manualtext" id="background" onclick='clicker.onClick()'></div>
+				<div class="manualtext" id="manualtext" onclick='clicker.onClick()'></div>
+    			<img id='growbox' src='/System/Library/WidgetResources/resize.png' onmousedown='mouseDown(event);'/>
+    			<!--div class='footer'></div-->
+    			<div class='debug' id='debug'></div>
+    		</div>
+    	</div>
+
+		<SELECT id="commands" onchange="reloadPageAtIndex(this.options[this.selectedIndex].value);">
+			<OPTION VALUE="0">Please search for a command</OPTION>
+		</SELECT>
+    
+    </div>
+
+	<div id="back">
+	
+		<img src="Images/backside.png" height='265' width='500'/>
+		<img src="Images/freebsd.png" class='bsdlogo' onclick="widget.openURL('http://www.freeBSD.org');" title='Free BSD'/>
+		<img src="Images/im.png" class='imlogo' onclick="widget.openURL('http://www.interdimensionmedia.com');" title='Interdimension Media'/>
+		
+			<form action='false;'>
+			<table class='preftable' width='400'>
+				<tr class='prefs' valign='top'>
+					<td colspan='2'>
+						<H2>Appearance:</H2>
+					</td>
+					<td colspan='3'></td>
+					<td>
+						<H2>Search:</H2>
+					</td>
+				</tr>
+				<tr class='prefs' valign='top'>
+					<td colspan='1'>
+						Font:<br>
+						<select id='fontface' style='width:75' onchange='changeFont(this);' tabindex='1'>							
+							<option value='0'>Andale</option>
+							<option value='1'>Monaco</option>
+							<option value='2'>Courier</option>
+						</select>
+					</td>
+					<td>
+						Size:<br>
+						<select id='fontsize' style='width:45' onchange='changeFontsize(this);' tabindex='2'>							
+							<option value='10'>10</option>
+							<option value='11'>11</option>
+							<option value='12'>12</font></option>
+							<option value='13'>13</option>
+							<option value='14'>14</font></option>
+						</select>
+					</td>
+					<td colspan='2'>
+						Colorset:<br>
+						<select id='colorset' style='width:100' align='right' onchange='parseColorset(this);' tabindex='3'>					
+							<option value="'CC4422','000000','CCFF55','DDDDDD','FFFFFF','000000'">Katchup</option>
+							<option value="'C3CB55','000000','115533','FFFFFF','000000','113355'">Mustard</option>
+							<option value="'88AA5F','000000','113300','FFFFFF','000000','113355'">Moss</option>
+							<option value="'223355','FFFFFF','DDBB00','FFFFFF','EEFF00','000000'">Ocean</option>
+							<option value="'221133','BBBBBB','FFFF66','FFDD00','99EE55','FFFFFF'">Eggplant</option>
+							<option value="'DDDDDD','000000','115533','FFFFFF','000000','113355'">Bland</option>
+							<option value="'000000','DDDDDD','FFFFFF','FFFFFF','FFFFFF','FFFFFF'">Purist</option>
+							<option value="'0000BB','FFFFFF','000000','FFFFFF','AAAAAA','000000'">BSoD</option>
+							<option value="'EEEEEE','000000','0000FF','0000FF','996600','008000'">FreeBSD</option>
+							<option value="">Custom</option>
+						</select>
+					</td>
+					<td><img width='20'></td>
+					<td align='left' rowspan='5'>
+						Search Locale:
+						<input type='radio' name='locale' id='local' value='0' onclick='javascript: localeChange(0);' tabindex='12'>Local</input>
+						<input type='radio' name='locale' id='remote' value='1' onclick='javascript: localeChange(1);' checked tabindex='13'>Remote</input>
+						<input type='checkbox' id='autodefault' tabindex='14'>Default to other locale on failure</input><br><br>
+						
+						<div id='remote_settings'>
+							Release:<br>
+							<div id='manpathdiv' style='width:190px; height: 20px;'>
+								<SELECT id="remote_manpath" tabindex='15'>
+									<OPTION VALUE="0">Requires Internet Connection</OPTION>
+								</SELECT>
+							</div>
+						</div>
+						<div id='local_settings' style='display: none;'>
+							Path:<br>
+							<div id='manpathdiv' style='height: 20px;'>
+								<INPUT id="local_manpath" class='dark_input' type='text' tabindex='16' value='/usr/share/man:/usr/local/share/man:/usr/local/man:/usr/X11/man'>
+							</div>
+						</div>
+						
+						Keep up to  <input id='hist_size' class='dark_input' type='text' value='10' onsubmit='' onchange='setHistorySize(this.value)' tabindex='17'></input> commands in history
+						
+					</td>
+				</tr>
+				<tr class='prefs'>
+					<td colspan='4'>
+						Opacity: <br><input type='range' id='opacity' value='90' min='0' max='100' step='1' onMouseUp="document.getElementById('background').style.opacity = this.value/100" tabindex='4'></input>
+					</td>
+				</tr>
+				<tr class='prefs'>
+					<td align='left'>
+						Background:<br><input class='hex_input' type='textbox' id='bgcolor' value='C3CBC2' placeholder='hex' maxLength='6' size='6' onchange="editCustomColorset();" tabindex='5'><div id='bgswatch' class='swatch'></div>
+					</td>
+					<td align='left' colspan='2'>
+						Font:<br><input class='hex_input' type='textbox' id='fontcolor' value='000000' placeholder='hex' maxLength='6' size='6' onchange="editCustomColorset();" tabindex='6'><div id='fontswatch' class='swatch'></div>
+					</td>
+				</tr>
+				<tr class='prefs'>
+					<td align='left'>
+						Links:<br><input class='hex_input' type='textbox' id='linkcolor' value='115533' placeholder='hex' maxLength='6' size='6' onchange="editCustomColorset();" tabindex='7'><div id='linkswatch' class='swatch'></div>
+					</td>
+					<td align='left' colspan='2'>
+						Highlights:<br><input class='hex_input' type='textbox' id='highlightcolor' value='FFFFFF' placeholder='hex' maxLength='6' size='6' onchange="editCustomColorset();" tabindex='8'><div id='highlightswatch' class='swatch'></div>
+					</td>
+				</tr>
+				<tr class='prefs'>
+					<td align='left'>
+						Bold:<br><input class='hex_input' type='textbox' id='boldcolor' value='000000' placeholder='hex' maxLength='6' size='6' onchange="editCustomColorset();" tabindex='9'><div id='boldswatch' class='swatch'></div>
+					</td>
+					<td align='left' colspan='2'>
+						Italic:<br><input class='hex_input' type='textbox' id='italiccolor' value='113355' placeholder='hex' maxLength='6' size='6' onchange="editCustomColorset();" tabindex='10'><div id='italicswatch' class='swatch'></div>
+					</td>
+				</tr>
+			</table>
+			</form>
+			
+		<div id="done" class="doneButton"></div>
+				
+    </div>
+
+
+</body>
+</html>
