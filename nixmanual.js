@@ -8,16 +8,38 @@
 
 name = "nixmanual";
 version = "2.2";
+var debugMode = false;
 
 /******************************************************************************
  * super simple debug function to work with Dashboard & Safari
  * debugging output can be viwed in the Console (Applications/Utilities)
  *****************************************************************************/
-function debug(s)
+function debug(str)
 {
-	// document.getElementById('debug').innerText = s;
-	// alert(s);
-    DEBUG(s);
+    // Write to the debug div when running in a browser.
+    // Send a simple alert to Console when in Dashboard.
+	if (debugMode) {
+        if (!window.widget) {
+            console.debug(str);
+        }
+        else
+		{
+			var debugDiv = document.getElementById('debugDiv');
+			debugDiv.appendChild(document.createTextNode(str));
+			debugDiv.appendChild(document.createElement("br"));
+			debugDiv.scrollTop = debugDiv.scrollHeight;
+		}
+	}
+}
+
+// Toggle the debugMode flag, but only show the debugDiv in Safari
+function toggleDebug() {
+    // debugMode = !debugMode;
+	if (debugMode == true && window.widget) {
+		document.getElementById('debugDiv').style.display = 'block';
+	} else {
+		document.getElementById('debugDiv').style.display = 'none';
+	}
 }
 
 /******************************************************************************
@@ -25,6 +47,9 @@ function debug(s)
  *****************************************************************************/
 function setup()
 {		
+    // Activate debug
+    toggleDebug();
+    
     key = null;
     modifier = null;
 	timer = null;
@@ -153,7 +178,7 @@ function displayHelp()
 	
 	document.getElementById('manualtext').innerHTML = response;
 	
-	//alert(document.getElementById('manualtext').innerHTML);	
+	//debug(document.getElementById('manualtext').innerHTML);	
 }
 
 // replace spaces with '+' for searching
@@ -265,6 +290,7 @@ function processRequest(q,linked) {
 	//check for skip-format flag
 	if(q.match(/-i /))
 	{
+        debug("skipFormatting");
 		skipFormatting = true;
 		q = q.replace("-i ", " ");
 	} else
@@ -273,6 +299,7 @@ function processRequest(q,linked) {
 	//handle request for *NIX manual help pages
 	if(q == 'help' || q == 'nixmanual')
 	{	
+        debug("help");
 		query = q;
 		searchID = 'help';		
 		displayHelp();
@@ -282,6 +309,7 @@ function processRequest(q,linked) {
 	//handle subsearch mode when active
 	else if(subsearch)
 	{
+        debug("subsearch");
 		if(q)
 			highlightKeyword(q);
 		else 
@@ -297,6 +325,7 @@ function processRequest(q,linked) {
 	//standard search
 	else if(q)
 	{
+        debug("preparing the query");
 		linkedPage = linked;
 		query = q;
 		
@@ -630,8 +659,10 @@ function linkLookup(q, s)
 		document.getElementById("SearchField").value = query;
 		
 		document.getElementById("manualtext").innerHTML = "<br><br><br><br><br><br><br><br><br><table width=100%'><tr><td align='center'><b>Loading manual entry for '</b><i>" + query + "</i><b>'...</b></td></tr><tr><td align='center'><img src='Images/progress.gif' width='115' height='10'></td></tr></table>";
-				
-		setTimeout("remoteLookup('" + query + "', 0, '" + section + "', 'FreeBSD+5.3+RELEASE+and+Ports')", 5);
+		
+        var queryString = "remoteLookup('" + query + "', 0, '" + section + "', 'FreeBSD+5.3+RELEASE+and+Ports')";
+        debug("linkLookup: " + queryString);
+		setTimeout(queryString, 5);
 	}
 	//refocus the search field
 	document.getElementById('SearchField').focus();
@@ -649,7 +680,9 @@ function selectionLookup()
 	{	
 		query = selectedText;
 		document.getElementById('SearchField').value = query;
-		setTimeout("processRequest('"+query+"', 0)", 0);
+        var queryString = "processRequest('"+query+"')";
+        debug(queryString);
+		setTimeout(queryString, 0);
 	}
 }
 
@@ -968,10 +1001,12 @@ function formatHex(s)
  * search field focus trackers
  *****************************************************************************/
 function onFocus(event) {
+    debug('onFocus');
 	searchFocus = true;
 }
 
 function onBlur(event) {
+    debug('onBlur');
 	searchFocus = false;
 }
 
@@ -1017,7 +1052,9 @@ function interpretKey(delay, speed, e) {
 	{
 		//alert(key);
 		
+	debug('keypressed: ' + key);
 		if(document.getElementById("front").style.display == 'none') {
+    		debug('front is none');
 			setTimeout("updateSwatches();",5);
 		} else {
 			switch(key) {
@@ -1058,7 +1095,9 @@ function interpretKey(delay, speed, e) {
 						}
 						break;
 				//enter
-				case 13:if(!searchFocus && !prefsVisible)
+				case 13:
+                    debug('searchfocus: '+ searchFocus + ', prefsVisible:' + prefsVisible);
+                    if(!searchFocus && !prefsVisible)
 						{
 							selectionLookup();
 							highlightKeyword(highlightedKeyword);
@@ -1206,9 +1245,9 @@ function hidePrefs()
 	
     try{
     	if (window.widget) {
+            debug("transicion...");
     		savePrefs();
     		widget.prepareForTransition("ToFront");		// freezes the widget
-            debug("transicion...");
     	}
 	
     	back.style.display="none";			// hide the back
@@ -1225,7 +1264,7 @@ function hidePrefs()
         
     }
     catch (err){
-        debug("error: " + err.message);
+        debug("error while hidePrefs: " + err.message);
     }
 }
 
@@ -1411,4 +1450,5 @@ function exitflip(event)
 {
 	document.getElementById('fliprollie').style.display = 'none';
 }
+
 
