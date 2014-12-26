@@ -1,5 +1,5 @@
-page_history = null;
-historyIndex = 0;
+var page_history = null;
+var historyIndex = 0;
 
 function h_page(c, h, s)
 {
@@ -17,7 +17,7 @@ function clearHistory()
 	page_history = new Array(page_history[historyIndex]);
 	historyIndex = 0;
 	
-	populateHistoryPopup()
+	populateHistoryPopup();
 }
 
 function setHistorySize(n)
@@ -32,7 +32,7 @@ function setHistorySize(n)
 			reloadPageAtIndex(historyIndex);
 		}
 		
-		populateHistoryPopup()
+		populateHistoryPopup();
 	}
 }
 
@@ -50,7 +50,7 @@ function addHistory(command, html, section, scroll, h_word)
 	if(page_history.length > document.getElementById('hist_size').value*1) page_history.shift();
 	historyIndex = page_history.length - 1;
 	
-	populateHistoryPopup()
+	populateHistoryPopup();
 	highlightedKeyword = '';
 }
 
@@ -70,7 +70,7 @@ function removeHistory()
 	else
 		reloadPageAtIndex(historyIndex);
 		
-	populateHistoryPopup()
+	populateHistoryPopup();
 }
 
 function h_back()

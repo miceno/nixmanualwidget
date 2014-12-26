@@ -25,14 +25,14 @@
  */
 
 function onClick(i) {
-  if ( i == undefined )  i = true;
+  if ( i === undefined )  i = true;
   if ( this.clicked == i ) {
-    this.onDoubleClick(i)
+      this.onDoubleClick(i);
     this.clicked = null;
     this.selected = i;
   } 
   else {
-    if (this.selected != null && this.selected != i)  this.onUnselect();
+    if (this.selected !== null && this.selected != i)  this.onUnselect();
     this.onSelect(i);
     this.clicked = i;
     if ( typeof(i) == "string" )  i = "'"+i+"'";

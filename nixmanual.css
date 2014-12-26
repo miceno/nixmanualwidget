@@ -103,6 +103,7 @@ body {
 	position: absolute;
 	top: 35px;
 	left: 10px;
+    height: 200px;
 	font: 12px "Arial Black";
     font-weight: bold;
     color: #ffffff;
