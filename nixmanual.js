@@ -1667,46 +1667,53 @@ function hidePrefs()
 
 function loadPrefs()
 {
-	colorsetIndex = widget.preferenceForKey('colorsetIndex');
-	fontIndex = widget.preferenceForKey('fontIndex');
-	fontsizeIndex = widget.preferenceForKey('fontsizeIndex');
-	sectionIndex = widget.preferenceForKey('sectionIndex');
-	manpathIndex = widget.preferenceForKey('manpathIndex');
-	manpath = widget.preferenceForKey('manpath');
-	locale = widget.preferenceForKey('locale');
-	autodefault = widget.preferenceForKey('autodefault');
-	opacity = widget.preferenceForKey('opacity');
-	windowHeight = widget.preferenceForKey('windowHeight');
-	
-	if(colorsetIndex)
-	{
+    // Only get preferences from plist files if we are running on the 
+    // Dashboard environment.
+    if(window.widget){
+    	colorsetIndex = widget.preferenceForKey('colorsetIndex');
+    	fontIndex = widget.preferenceForKey('fontIndex');
+    	fontsizeIndex = widget.preferenceForKey('fontsizeIndex');
+    	sectionIndex = widget.preferenceForKey('sectionIndex');
+    	manpathIndex = widget.preferenceForKey('manpathIndex');
+    	manpath = widget.preferenceForKey('manpath');
+    	locale = widget.preferenceForKey('locale');
+    	autodefault = widget.preferenceForKey('autodefault');
+    	opacity = widget.preferenceForKey('opacity');
+    	windowHeight = widget.preferenceForKey('windowHeight');
+    	if(colorsetIndex)
+    	{	
+    		document.getElementById('background').style.opacity = opacity/100;
+    		document.getElementById('opacity').value = opacity;
+    		document.getElementById('colorset').selectedIndex = parseInt(colorsetIndex);
+    		document.getElementById('fontface').selectedIndex = parseInt(fontIndex);
+    		document.getElementById('fontsize').selectedIndex = parseInt(fontsizeIndex);
+    		document.getElementById('section').selectedIndex = parseInt(sectionIndex);
+    		if(sectionIndex && document.getElementById('section'))
+    			selectSection(document.getElementById('section').options[sectionIndex].value);
+    		if(!runLocal && manpathIndex)
+    			document.getElementById('remote_manpath').selectedIndex = parseInt(manpathIndex);
+    		if(manpath)
+    			document.getElementById('local_manpath').value = manpath;
 		
-		document.getElementById('background').style.opacity = opacity/100;
-		document.getElementById('opacity').value = opacity;
-		document.getElementById('colorset').selectedIndex = parseInt(colorsetIndex);
-		document.getElementById('fontface').selectedIndex = parseInt(fontIndex);
-		document.getElementById('fontsize').selectedIndex = parseInt(fontsizeIndex);
-		document.getElementById('section').selectedIndex = parseInt(sectionIndex);
-		if(sectionIndex && document.getElementById('section'))
-			selectSection(document.getElementById('section').options[sectionIndex].value);
-		if(!runLocal && manpathIndex)
-			document.getElementById('remote_manpath').selectedIndex = parseInt(manpathIndex);
-		if(manpath)
-			document.getElementById('local_manpath').value = manpath;
+    		localeChange((locale) ? 0 : 1);
 		
-		localeChange((locale) ? 0 : 1);
+    		document.getElementById('autodefault').checked = (autodefault) ? 1 : 0;
 		
-		document.getElementById('autodefault').checked = (autodefault) ? 1 : 0;
+    		parseColorset(document.getElementById('colorset'));
+    		changeFont(document.getElementById('fontface'));
 		
-		parseColorset(document.getElementById('colorset'));
-		changeFont(document.getElementById('fontface'));
-		
-		updateSwatches();
-		changeFontsize(document.getElementById('fontsize'));
+    		updateSwatches();
+    		changeFontsize(document.getElementById('fontsize'));
+    	} else {
+    		document.getElementById('colorset').selectedIndex = 5;
+    		parseColorset(document.getElementById('colorset'));
+    	}
 	} else {
 		document.getElementById('colorset').selectedIndex = 5;
 		parseColorset(document.getElementById('colorset'));
 	}
+	
+
 }
 
 function savePrefs()
