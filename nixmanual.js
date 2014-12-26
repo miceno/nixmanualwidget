@@ -504,7 +504,7 @@ function loadSearchPulldowns()
             debug("sektion");
             var APROPOS_OPTION = "<OPTION VALUE='k'>k - Keyword Search (apropos)</OPTION>";
             sektion.innerHTML = sektion.innerHTML + APROPOS_OPTION;
-            debug("sektion innerHTML");
+            debug("sektion innerHTML: " + sektion.innerHTML);
             
             // Get manpath
             var manpathElement = dummyDoc.getElementsByName('manpath')[0];            
