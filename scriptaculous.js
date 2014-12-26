@@ -38,14 +38,14 @@ var Scriptaculous = {
        throw("script.aculo.us requires the Prototype JavaScript framework >= 1.5.0");
     
     $A(document.getElementsByTagName("script")).findAll( function(s) {
-      return (s.src && s.src.match(/scriptaculous\.js(\?.*)?$/))
+        return (s.src && s.src.match(/scriptaculous\.js(\?.*)?$/));
     }).each( function(s) {
       var path = s.src.replace(/scriptaculous\.js(\?.*)?$/,'');
       var includes = s.src.match(/\?.*load=([a-z,]*)/);
       (includes ? includes[1] : 'builder,effects,dragdrop,controls,slider').split(',').each(
-       function(include) { Scriptaculous.require(path+include+'.js') });
+       function(include) { Scriptaculous.require(path+include+'.js'); });
     });
   }
-}
+};
 
 Scriptaculous.load();

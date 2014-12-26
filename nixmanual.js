@@ -14,8 +14,9 @@ version = "2.0";
  *****************************************************************************/
 function debug(s)
 {
-	//document.getElementById('debug').innerText = s;
-	//alert(s);
+	// document.getElementById('debug').innerText = s;
+	// alert(s);
+    DEBUG(s);
 }
 
 /******************************************************************************
@@ -40,7 +41,7 @@ function setup()
 	command = null;
 	lookupTimer = null;
 	secondaryLookup = false;
-	page_history = new Array();
+	page_history = [];
 	windowHeight = 300;
 	skipFormatting = false;
 	
@@ -52,7 +53,7 @@ function setup()
 	req = null;
 	
 	document.getElementById("manualtext").innerHTML = "<br><br><br><br><br><br><br><br><br><table width=100%'><tr><td align='center'><b>*NIX</b> <i>manual</i></td></tr></table>";
-	//document.getElementById('debug').innerText = 'v' + version;
+	debug( 'v' + version);
 	
 	window.onkeydown = interpretKeypress;
 	window.onkeyup = interpretKeyrelease;
@@ -80,26 +81,29 @@ function loadSearchPulldowns()
 {	
 	req = new XMLHttpRequest();
 	url = "http://www.freebsd.org/cgi/man.cgi";
-	req.open("GET", url ,false);
-	req.send(null);
-	
+    req.open("GET", url ,false);
+    req.send(null);
 	if(req.responseText)
 	{
+        debug("responseText");
 		response = req.responseText;
 			
 		start = response.indexOf("<select name=\"sektion\">") + 23;
-		end = response.indexOf("<select name=\"manpath\">") - 9;
+		end = response.indexOf("<select name=\"manpath\">") - 10;
+        // debug( "sekction string: " + response.substring(start, end));
 		sectionHTML = "<select id='section' onchange=\"selectSection(this.options[this.selectedIndex].value);document.getElementById('SearchField').focus();document.getElementById('SearchField').select();\">" + response.substring(start, end);
 		sectionHTML += "<OPTION VALUE='k'>k - Keyword Search (apropos)</OPTION>";
 		
 		start = end;
 		end = response.indexOf("<input name=\"apropos\" value=\"1");
+        // debug( "apropos string: " + response.substring(start, end));
 		manpathHTML = "<select id='remote_manpath'>" + response.substring(start, end);
 			
 		document.getElementById('sectiondiv').innerHTML = sectionHTML;
 		document.getElementById('manpathdiv').innerHTML = manpathHTML;
 	} else {
-		showStatus("<b>No internet connection detected.  Lookups will default to the local man pages.</b>", 0);
+        debug("no responseText");
+		displayStatus("<b>No internet connection detected.  Lookups will default to the local man pages.</b>", 0);
 		expand_collapse();
 		runLocally();
 	}
@@ -111,10 +115,10 @@ function selectSection(section)
 	document.getElementById('section_label').innerText = section;
 	document.getElementById('section').selectedIndex = 0;
 	
-	for(i = 0; i < document.getElementById('section').options.length; i++)
+	for(i = 0; i < document.getElementById('section').options.length; i++){
 		if(document.getElementById('section').options[i].value == section)
 			document.getElementById('section').selectedIndex = i;
-	
+	}
 	sectionIndex = '' + document.getElementById('section').selectedIndex;
 	widget.setPreferenceForKey(sectionIndex, 'sectionIndex');
 }
@@ -124,8 +128,8 @@ function runLocally()
 {
 	runLocal = true;
 	
-	document.getElementById('remote_settings').style.display = 'none'
-	document.getElementById('local_settings').style.display = 'block'
+	document.getElementById('remote_settings').style.display = 'none';
+	document.getElementById('local_settings').style.display = 'block';
 	document.getElementById('local').checked = true;
 	document.getElementById('remote').disabled = true;
 }
@@ -138,7 +142,7 @@ function displayHelp()
 {
 	req = new XMLHttpRequest();
 	
-	debug('getting help')
+	debug('getting help');
 	req.open("GET", "help.txt" ,false);
 	req.send(null);
 	response = formatManpage('<PRE><br><br>' + req.responseText + '</PRE>');
@@ -190,7 +194,7 @@ function expand_collapse()
 {
 	if(resizing) return;
 	
-	if(document.getElementById('function').innerText == '') return;
+	if(document.getElementById('function').innerText === '') return;
 	
 	document.getElementById('tab').style.display = "block";
 	document.getElementById('SearchField').focus();
@@ -202,14 +206,14 @@ function expand_collapse()
 		window.resizeBy(0, windowHeight - window.outerHeight);
 		
 		expanded = true;
-		Effect.BlindDown('blind', {duration: .2});
+		Effect.BlindDown('blind', {duration: 0.2});
 		document.getElementById('SearchField').blur();
 	} else {
 		resizing = true; setTimeout("resizing=false;", 250);
 		setTimeout("window.resizeBy(0, 55 - window.outerHeight);", 250);
 		
 		expanded = false;
-		Effect.BlindUp('blind', {duration: .2});
+		Effect.BlindUp('blind', {duration: 0.2});
 	}
 }
 
@@ -221,7 +225,7 @@ function findPosX(obj)
 	{
 		while (obj.offsetParent)
 		{
-			curleft += obj.offsetLeft
+			curleft += obj.offsetLeft;
 			obj = obj.offsetParent;
 		}
 	}
@@ -239,7 +243,7 @@ function findPosY(obj)
 	{
 		while (obj.offsetParent)
 		{
-			curtop += obj.offsetTop
+			curtop += obj.offsetTop;
 			obj = obj.offsetParent;
 		}
 	}
@@ -323,7 +327,7 @@ function processRequest(q,linked) {
 		
 		manpathPulldown = document.getElementById('remote_manpath');
 		manpath = manpathPulldown[manpathPulldown.selectedIndex].value;
-		locale  = manpathPulldown.disabled == true;
+		locale  = manpathPulldown.disabled === true;
 		
 		newID = query  + apropos + section + manpath + locale;
 		
@@ -367,7 +371,7 @@ function processRequest(q,linked) {
 /******************************************************************************
  * perform a search of the local manpages
  *****************************************************************************/
-function localLookup(q,a,s,m)
+function localLookup(q,a,s,man_path)
 {	
 	//kill presently running lookup
 	if(command)
@@ -413,7 +417,7 @@ function loadPageFromFile()
 	req.open("GET", "nixmanpage.txt" ,false);
 	req.send(null);
 	
-	if(req.responseText == '')
+	if(req.responseText === '')
 		response = 'No manual entry';
 	else
 	{
@@ -519,7 +523,7 @@ function remoteLookup(q,a,s,m)
 {
 	req = new XMLHttpRequest();
 	url = "http://www.freebsd.org/cgi/man.cgi?query=" + q + (a ? "&apropos=true" : "") + "&sektion=" + s + "&manpath=" + m + "&format=html";
-	alert(url);
+	debug(url);
 	req.open("GET", url ,true);
 	//req.setRequestHeader("Cache-Control", "no-cache");
 	req.onreadystatechange = doneRemoteLookup;
@@ -624,7 +628,7 @@ function linkLookup(q, s)
 		setTabText(query);
 		document.getElementById("SearchField").value = query;
 		
-		document.getElementById("manualtext").innerHTML = "<br><br><br><br><br><br><br><br><br><table width=100%'><tr><td align='center'><b>Loading manual entry for '</b><i>" + query + "</i><b>'...</b></td></tr><tr><td align='center'><img src='Images/progress.gif' width='115' height='10'></td></tr></table>"
+		document.getElementById("manualtext").innerHTML = "<br><br><br><br><br><br><br><br><br><table width=100%'><tr><td align='center'><b>Loading manual entry for '</b><i>" + query + "</i><b>'...</b></td></tr><tr><td align='center'><img src='Images/progress.gif' width='115' height='10'></td></tr></table>";
 				
 		setTimeout("remoteLookup('" + query + "', 0, '" + section + "', 'FreeBSD+5.3+RELEASE+and+Ports')", 5);
 	}
@@ -640,7 +644,7 @@ function linkLookup(q, s)
 function selectionLookup()
 {
 	selectedText = window.getSelection();
-	if(selectedText != '')
+	if(selectedText !== '')
 	{	
 		query = selectedText;
 		document.getElementById('SearchField').value = query;
@@ -653,7 +657,7 @@ function selectionLookup()
  *****************************************************************************/
 function highlightKeyword(word, force)
 {
-	if(force || highlightedKeyword != word && word != '')
+	if(force || highlightedKeyword != word && word !== '')
 	{
 		re = new RegExp('((\<[ib]\>)*'+word+'(\<\\[ib]\>)*)', 'gi');
 		debug(re);
@@ -700,7 +704,7 @@ function formatManpage(s)
 	s = s.replace(pattern, replace);
 	
 	//format functions
-	pattern = /([\w-_.]+)\(([^\)]*)\)/g;
+	pattern = /([\w\-_.]+)\(([^\)]*)\)/g;
 	replace = "<b>$1</b>(<i>$2</i>)";
 	s = s.replace(pattern, replace);
 
@@ -725,22 +729,22 @@ function formatManpage(s)
 	s = s.replace(pattern, replace);
 
 	//bold flag and italicize args
-	pattern = /(\s-+[\w-]+)=(\w[\w.-_]*)/g;
+	pattern = /(\s\-+[\w\-]+)=(\w[\w.\-_]*)/g;
 	replace = "<b>$1</b>=<i>$2</i>\n";
 	s = s.replace(pattern, replace);
 	
 	//bold flag and italicize args
-	pattern = /(\s-+[\w-@]+)([\s=]+)(\w[\w.-_]*\s*)\n/g;
+	pattern = /(\s\-+[\w\-@]+)([\s=]+)(\w[\w.\-_]*\s*)\n/g;
 	replace = "<b>$1</b>$2<i>$3</i>\n";
 	s = s.replace(pattern, replace);
 	
 	//bold flags
-	pattern = /(\s-+[\w@][\w-@]*)/g;
+	pattern = /(\s\-+[\w@][\w\-@]*)/g;
 	replace = "<b>$1</b>";
 	s = s.replace(pattern, replace);
 
 	//underline args
-	pattern = /\[((-*\w+)+)\s*([^\]]*)/g;
+	pattern = /\[((\-*\w+)+)\s*([^\]]*)/g;
 	replace = "[<b>$1</b> <u>$3</u>";
 	s = s.replace(pattern, replace);
 	
@@ -750,7 +754,7 @@ function formatManpage(s)
 	s = s.replace(pattern, replace);	
 
 	//bold section headers and capitalized words
-	pattern = /(([A-Z]|_|-){4,})/g;
+	pattern = /(([A-Z]|_|\-){4,})/g;
 	replace = "<b>$1</b>";
 	s = s.replace(pattern, replace);
 
@@ -814,7 +818,7 @@ function changeFontsize(e)
 	changeCSSRule("manualtext", "fontSize", size);
 	
 	//alert("default size: " + (510 + 70*Math.pow(size-10, .65)));
-	window.resizeTo(510 + 70*Math.pow(size-10, .65), window.outerHeight);
+	window.resizeTo(510 + 70*Math.pow(size-10, 0.65), window.outerHeight);
 }
 
 /******************************************************************************
@@ -823,9 +827,9 @@ function changeFontsize(e)
 function localeChange(location)
 {
 	manpathPulldown = document.getElementById('remote_manpath');
-	document.getElementById('local').checked = (location == 0);
+	document.getElementById('local').checked = (location === 0);
 
-	if(location == 0)
+	if(location === 0)
 	{
 		manpathPulldown.disabled = true;
 		document.getElementById('remote_settings').style.display = 'none';
@@ -875,7 +879,7 @@ function parseColorset(e)
 {
 	colorset = e[e.selectedIndex].value;
 	
-	if(colorset == "")
+	if(colorset === "")
 		colorset = loadCustomColorset();
 	
 	eval("applyColorset(" + colorset + ");");
@@ -983,7 +987,7 @@ function interpretKeypress(e)
 		if(interpretKey(500, 20, e))
 		{
 			e.stopPropagation();
-        	e.preventDefault();
+			e.preventDefault();
 		}
 	}
 }
@@ -1061,7 +1065,7 @@ function interpretKey(delay, speed, e) {
 						}
 						break;
 				//(sublookup: / )
-				case 191:if(searchID != '')
+				case 191:if(searchID !== '')
 						{
 							subsearch = true;
 							
@@ -1199,22 +1203,29 @@ function hidePrefs()
 	var front = document.getElementById("front");
 	var back = document.getElementById("back");
 	
-	if (window.widget) {
-		savePrefs();
-		widget.prepareForTransition("ToFront");		// freezes the widget
-	}
+    try{
+    	if (window.widget) {
+    		savePrefs();
+    		widget.prepareForTransition("ToFront");		// freezes the widget
+            debug("transicion...");
+    	}
 	
-	back.style.display="none";			// hide the back
-	front.style.display="block";		// show the front
+    	back.style.display="none";			// hide the back
+    	front.style.display="block";		// show the front
 	
-	window.resizeBy(0, windowHeight - window.outerHeight);
+    	window.resizeBy(0, windowHeight - window.outerHeight);
 	
-	if (window.widget)
-		setTimeout ('widget.performTransition();', 0);		// flip it back
+    	if (window.widget)
+    		setTimeout ('widget.performTransition();', 0);		// flip it back
 	
-	prefsVisible = false;
-	document.getElementById('SearchField').focus();
-	document.getElementById('SearchField').select();
+    	prefsVisible = false;
+    	document.getElementById('SearchField').focus();
+    	document.getElementById('SearchField').select();
+        
+    }
+    catch (err){
+        debug("error: " + err.message);
+    }
 }
 
 function loadPrefs()
@@ -1303,13 +1314,13 @@ function mousemove (event)
 	if (!flipShown)		// if the preferences flipper is not already showing...
 	{
 		//reset the timer
-		if (animation.timer != null)
+		if (animation.timer !== null)
 		{
 			clearInterval (animation.timer);
 			animation.timer  = null;
 		}
 		
-		var starttime = (new Date).getTime() - 13; 	// set it back one frame
+		var starttime = (new Date()).getTime() - 13; 	// set it back one frame
 		
 		animation.duration = 500;												// animation time, in ms
 		animation.starttime = starttime;										// specify the start time
@@ -1331,7 +1342,7 @@ function mouseexit (event)
 	if (flipShown)
 	{
 		// fade in the flip widget
-		if (animation.timer != null)
+		if (animation.timer !== null)
 		{
 			clearInterval (animation.timer);
 			animation.timer  = null;
@@ -1356,7 +1367,7 @@ function animate()
 {
 	var T;
 	var ease;
-	var time = (new Date).getTime();
+	var time = (new Date()).getTime();
 	
 	T = limit_3(time-animation.starttime, 0, animation.duration);
 	
