@@ -1,12 +1,12 @@
 /******************************************************************************
- *                              *NIX manual 2.0
+ *                              *NIX manual 2.1
  *****************************************************************************/
 /******************************************************************************
- * Eben Eliason, http://www.interdimensionmedia.com					11/11/2007
+ * Eben Eliason, http://www.interdimensionmedia.com					11/26/2007
  *****************************************************************************/
 
 name = "nixmanual";
-version = "2.0";
+version = "2.1";
 
 /******************************************************************************
  * super simple debug function to work with Dashboard & Safari
@@ -63,13 +63,13 @@ function setup()
 
 	clicker = new DoubleClick( "selectionLookup()");
 
-	loadSearchPulldowns();
-	loadPrefs();
-	
 	createGenericButton( document.getElementById('done'), 'Done', hidePrefs);
 	
 	document.getElementById('SearchField').focus();
 	document.getElementById('SearchField').select();
+
+	loadSearchPulldowns();
+	loadPrefs();
 }
 
 /******************************************************************************
@@ -303,7 +303,7 @@ function processRequest(q,linked) {
 		//should change to occur when prefs are saved instead of each lookup
 		
 		sectionPulldown = document.getElementById("section");
-		section = sectionPulldown[sectionPulldown.selectedIndex].value;
+		section = (sectionPulldown.selectedIndex) ? sectionPulldown[sectionPulldown.selectedIndex].value : "";
 		if(section == 'k' || q.match(/(\s|^)-k\s/))
 		{
 			apropos = true;
@@ -1250,9 +1250,12 @@ function loadPrefs()
 		document.getElementById('fontface').selectedIndex = parseInt(fontIndex);
 		document.getElementById('fontsize').selectedIndex = parseInt(fontsizeIndex);
 		document.getElementById('section').selectedIndex = parseInt(sectionIndex);
-		selectSection(document.getElementById('section').options[sectionIndex].value);
-		if(!runLocal) document.getElementById('remote_manpath').selectedIndex = parseInt(manpathIndex);
-		if(manpath) document.getElementById('local_manpath').value = manpath;
+		if(sectionIndex && document.getElementById('section'))
+			selectSection(document.getElementById('section').options[sectionIndex].value);
+		if(!runLocal && manpathIndex)
+			document.getElementById('remote_manpath').selectedIndex = parseInt(manpathIndex);
+		if(manpath)
+			document.getElementById('local_manpath').value = manpath;
 		
 		localeChange((locale) ? 0 : 1);
 		
