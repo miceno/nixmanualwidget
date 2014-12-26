@@ -1071,9 +1071,12 @@ function linkLookup(q, s)
 		
 		document.getElementById("manualtext").innerHTML = "<br><br><br><br><br><br><br><br><br><table width=100%'><tr><td align='center'><b>Loading manual entry for '</b><i>" + query + "</i><b>'...</b></td></tr><tr><td align='center'><img src='Images/progress.gif' width='115' height='10'></td></tr></table>";
 		
-        var queryString = "remoteLookup('" + query + "', 0, '" + section + "', 'FreeBSD+5.3+RELEASE+and+Ports')";
-        debug("linkLookup: " + queryString);
-		setTimeout(queryString, 5);
+        // TODO: Get current manpath
+        selectedManPath = manpath; // 'FreeBSD+5.3+RELEASE+and+Ports';
+        // var queryString = "remoteLookup('" + query + "', 0, '" + section + "', selectedManPath)";
+        // debug("linkLookup: " + queryString);
+        remoteLookup(query, 0, section, selectedManPath);
+		// setTimeout(queryString, 5);
 	}
 	//refocus the search field
 	document.getElementById('SearchField').focus();
