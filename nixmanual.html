@@ -46,50 +46,6 @@
 
 </style>
 
-<style type="text/css">
-	#debugDiv {
-		border-style: dotted;
-		border-color: black;
-		background: gray;
-		position: absolute;
-		top: 35px;
-		left: 0px;
-		height: 200px;
-		width: 90%;
-		overflow: hidden;
-/*		display:none;*/
-	}
-</style>
-<script language="JavaScript" type="text/javascript">
-var debugMode = true;
-
-// Write to the debug div when in Safari.
-// Send a simple alert to Console when in Dashboard.
-function DEBUG(str) {
-	if (debugMode) {
-		// if (!window.widget) {
-		// 	alert(str);
-		// }
-		// else
-		{
-			var debugDiv = document.getElementById('debugDiv');
-			debugDiv.appendChild(document.createTextNode(str));
-			debugDiv.appendChild(document.createElement("br"));
-			debugDiv.scrollTop = debugDiv.scrollHeight;
-		}
-	}
-}
-
-// Toggle the debugMode flag, but only show the debugDiv in Safari
-function toggleDebug() {
-	debugMode = !debugMode;
-	if (debugMode == true && !window.widget) {
-		document.getElementById('debugDiv').style.display = 'block';
-	} else {
-		document.getElementById('debugDiv').style.display = 'none';
-	}
-}
-</script>
 <script type='text/javascript' src='file:///System/Library/WidgetResources/button/genericButton.js'></script>
 <script type='text/javascript' src="doubleclick.js"></script>
 <script type='text/javascript' src="prototype.js"></script>
