@@ -74,7 +74,7 @@ body {
 #section_label {
 	position: absolute;
 	top: 5px;
-	right: 170px;
+	right: 190px;
 	font: 20px "Lucida Grande";
 	font-weight: bold;
 	color: #888;
@@ -260,7 +260,7 @@ H2 {
 	position: absolute;
 	top: 35px;
 	left: 0px;
-	height: 200px;
+	height: 500px;
 	width: 90%;
 	overflow: hidden;
     display:none;
