@@ -1422,28 +1422,22 @@ function onBlur(event) {
  *****************************************************************************/
 function interpretKeypress(e)
 {
-	if(window.widget)
-	{	
-		key = e.keyCode;
-		modifier = modifierKey(e);
-		
-		if(interpretKey(500, 20, e))
-		{
-			e.stopPropagation();
-			e.preventDefault();
-		}
+	key = e.keyCode;
+	modifier = modifierKey(e);
+	
+	if(interpretKey(500, 20, e))
+	{
+		e.stopPropagation();
+		e.preventDefault();
 	}
 }
 
 function interpretKeyrelease(e)
 {
-	if(window.widget)
-	{
-		key = null;
-	
-		if(timer)
-			clearTimeout(timer);
-	}
+	key = null;
+
+	if(timer)
+		clearTimeout(timer);
 }
 
 function modifierKey(e)
@@ -1452,14 +1446,10 @@ function modifierKey(e)
 }
 
 function interpretKey(delay, speed, e) {
-			
-	//alert("key pressed");
-	
-	if(window.widget && key)
-	{
-		//alert(key);
-		
+				
 	debug('keypressed: ' + key);
+    if(key)
+	{		
 		if(document.getElementById("front").style.display == 'none') {
     		debug('front is none');
 			setTimeout("updateSwatches();",5);
