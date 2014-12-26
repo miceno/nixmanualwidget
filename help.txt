@@ -1,0 +1,245 @@
+*NIXmanual                  Interdimension Media                      *NIXmanual
+
+
+NAME
+       *NIX Manual - format and display local or remote manual pages
+
+DESCRIPTION
+
+       Bring some style to your coding habits.
+
+       *NIX Manual provides a clean and friendly interface for performing look-
+       ups on commonly (and, more importantly, not so commonly) used commands. 
+       It stores preferences for font and a fully-customizable set of colors and
+       also includes 9 attractive pre-made color sets. Pages are neatly-
+       formatted and highlighted based upon your color preferences.
+
+       *NIX Manual performs man page lookups either locally or remotely through
+       freeSBD.org, with several search options to make finding what you need
+       even easier. With a wide number of search options including section,
+       keyword, subsearch, and nearly full support for command line flags, 
+       everything you need to be productive while coding is now in your
+       Dashboard.
+
+SEARCH LOCALES
+
+       Local
+              Bring all of your local manpages to the dashboard.  When searching
+              locally any custom installed packages and all built-in OSX commands
+              will be at your fingertips. If needed, you can extend the MANPATH
+              variable on the reverse to search man pages in custom locations.
+
+       Remote
+              Optionally, you may search remotely through the FreeBSD.  Doing
+              so provides to search a wide variety of releases, and also
+              has the benefit of hyperlinked command references. (You can
+              simulate hyperlinks for local searches by double-clicking)
+
+SEARCH TYPES       
+
+       Section
+              Selection searches search the manual section chosen in the
+              popup to the left of the search field, with the default being
+              a search of all available sections.
+              
+       Keyword (Apropos)
+              Keyword searches, the last option in the section popup, locate all
+              instances of the specified search term anywhere in the manual pages.
+              Due to this exhaustive approach, keyword searches may take slightly
+              longer than other search types.
+              
+SEARCH METHODS
+
+       Search Field
+              Standard searches may be entered via the search field in the
+              upper right corner of the widget's title bar.  Entering searches
+              here will store them in the list of recent searches for added
+              convenience, and will also add the resulting page to the command
+              history.  To provide full keyboard access to the widget, see
+              the detailed description of the keyboard controls below.
+       
+       Hyperlink
+              This feature is available only when using the remote search
+              databases.  Embedded hyperlinks to related commands appear as in
+              regular HTML pages.
+
+       Virtual Hyperlink
+              *NIX Manual offers virtual hyperlinks to functions that appear in
+              a manual page, either local or remote.  Double click on any word
+              in the page and a search for that word will be automatically
+              initiated.
+       
+       Subsearch
+              By typing '/' at any time, the search filed will receive focus in
+              subsearch mode.  Performing a subsearch in an open manual page
+              will highlight all occurrences of the search query in the page.
+              Additionally, the first instance of the word will be shown on
+              screen, and pressing enter subsequently will cycle through all of
+              the highlighted words.
+
+COMMAND HISTORY
+
+       Size   The number of commands stored in the history can be set on the
+              backside of the widget.  The default is 10.
+
+       Browse
+              Every time you enter a search, the new man page will be added to
+              the command history (up to the specified limit).  Pages within
+              the history are kept in memory for instant access, and retain
+              their unique scroll positions, allowing them to function nearly
+              identically to tabs, but without the visual distraction.
+
+              The command history provides two convenient ways to find what you
+              need.  First, you can cycle forward and backward through the history
+              using Command - ] and Command - [ respectively.  Second, a complete
+              list of the history appears when clicking on the command label "tab"
+              at the top left corner of the page, allowing you to jump directly to
+              the page you desire.
+
+       Clear
+              Pressing the 'q' key at any time (when search field isn't focused)
+              will "close" the page for the current command.  You can clear the
+              complete history by selecting "Clear history" from the command menu.
+
+              If you find you desire a keyboard accessible way to enter a new
+              query without clearing the current page from the history, use the
+              Shift - Space shortcut to minimize the widget instead, focusing the
+              search field and allowing you to add a new command to the history.
+
+APPEARANCE
+
+       Font
+              *NIX Manual supports 3 standard fixed width fonts, Andale Mono,
+              Monaco, and Courier.  In addition, these fonts may be displayed at
+              integer sizes between 10 and 14 inclusive.
+              
+       Color
+              There are 9 pre-made color sets that one may select from.
+              
+              In addition, one may specify their desired colors for background
+              color, font color, bold color, italic color, and highlight color.
+              Presently these may be specified in hexadecimal notation.  The
+              colored swatches update live as you type to aid in this process.
+              
+              Note that only one custom color set is stored in preferences.  When
+              you edit any of the color preferences, 'custom' will be auto-
+              matically chosen in the color set pulldown.  Clicking 'Done' while
+              this item is selected will store the current settings.
+
+              If for any reason you would like to omit color formatting (for
+              local searches only), pass the -i flag in the search.
+       
+KEYBOARD CONTROLS
+
+       Up, Down
+              Use up and down arrows to scroll through the manual pages when the
+              search field does not have focus.
+       
+       Page up, Page down
+              Use page up and page down to scroll a page at a time.
+       
+       Home, End
+              Jump to the beginning or the end of the currently displayed manual
+              page, resectively.
+
+       Command + ] or [
+              The ] and [ keys will cycle forward and back through the command
+              history, respectively, when used with the Command key modifier.
+
+       Shift + Space
+              Minimize/maximize the widget.  In addition, minimizing the widget
+              will automatically focus the search field, allowing one to begin 
+              typing a new search following this keystroke.
+       
+       'q'
+              The functionality of the 'q' key is identical to that of the
+              terminal man command.  Typing 'q' when a manual page is open will 
+              close the search, minimizing the widget and focusing the search
+              field to allow the entering of a new query.
+
+              When there are multiple commands in the command history, the 'q'
+              key will simply close the page for the current command. Focus will
+              remain in the pages until the last command has been cleared, at
+              which point the search field will be given focus.
+       
+       '/'
+              Typing '/' whenever a manual page is open will focus the search
+              field in subsearch mode.  Similar to the man command in terminal,
+              all occurrences of the string entered in a subsearch will be
+              highlighted in the text of the open manual page.  Additionally, 
+              the first instance of the word will be shown on screen when the
+              search is entered, and subsequent enter keystrokes will cycle
+              through the highlighted words.  Note that the text within the
+              search field is gray when typing a subsearch.
+
+       Enter
+              The enter key is generally reserved for initiating searches when
+              the search field has focus.  An alternate use, however, is to
+              cycle through all words currently highlighted through previous use
+              of the /subsearch.
+       
+SUPPORTED OPTIONS
+
+       *NIX Manual supports many of the commonly used flags.  Begin any search
+       with these flags just as you would in the terminal.
+       
+       -C  config_file
+              Specify  the  configuration  file  to  use;   the   default   is
+              /usr/share/misc/man.conf.  (See man.conf(5).)
+
+       -M  path
+              Specify  the list of directories to search for man pages.  Sepa-
+              rate the directories with colons.  An empty list is the same  as
+              not specifying -M at all.
+
+       -S  section_list
+              List  is  a  colon  separated list of manual sections to search.
+              This option overrides the MANSECT environment variable.
+
+       -c     Reformat the source man page, even when an up-to-date  cat  page
+              exists.   This  can  be meaningful if the cat page was formatted
+              for a screen with a different number of columns, or if the  pre-
+              formatted page is corrupted.
+
+       -f     Equivalent to whatis.
+
+       -i     Ignore color text formatting
+       
+       -k     Equivalent to apropos.
+
+       -K     Search for the specified string in  *all*  man  pages.  Warning:
+              this  is  probably  very  slow!  It  helps to specify a section.
+              (Just to give a rough idea, on my machine  this  takes  about  a
+              minute per 500 man pages.)
+
+       -m  system
+              Specify  an  alternate  set  of man pages to search based on the
+              system name given.
+
+       -w
+              Don't actually display the man pages, but  do  print  the  loca-
+              tion(s) of the files that would be formatted or displayed. If no
+              argument is given: display (on stdout) the list  of  directories
+              that  is  searched by man for man pages.
+
+SEE ALSO
+
+       <a href="widget.openURL('http://www.interdimensionmedia.com')">www.interdimensionmedia.com</a>
+       <a href="widget.openURL('http://www.freeBSD.org')">www.freeBSD.org'</a>
+
+UPDATES
+       
+       Updates will be posted at the following locations:
+       
+             <a href='http://www.interdimensionmedia.com/widgets?widget=nixmanual' target='_blank'>www.interdimensionmedia.com</a>
+             <a href='http://www.apple.com/downloads/macosx/dashboard/' target='_blank'>www.apple.com/downloads/macosx/dashboard/</a>
+             <a href='http://www.dashboardwidgets.com' target='_blank'>www.dashboardwidgets.com</a>
+
+BUGS
+
+       To submit bug reports, visit <a href='http://www.interdimensionmedia.com' target='_blank'>www.interdimensionmedia.com</a> and
+       complete the form at the bottom of the page, or send email directly to
+       <a href='mailto:eben@interdimensionmedia.com' target='_blank'>eben@interdimensionmedia.com'</a>.
+
+
+*NIXmanual                     November 11, 2007                        *NIXmanual
