@@ -103,7 +103,6 @@ body {
 	position: absolute;
 	top: 35px;
 	left: 10px;
-    height: 200px;
 	font: 12px "Arial Black";
     font-weight: bold;
     color: #ffffff;
@@ -252,4 +251,17 @@ H2 {
 	position: absolute;
 	top: 230px;
 	left: 275px;
+}
+
+#debugDiv {
+	border-style: dotted;
+	border-color: black;
+	background: gray;
+	position: absolute;
+	top: 35px;
+	left: 0px;
+	height: 200px;
+	width: 90%;
+	overflow: hidden;
+    display:none;
 }
