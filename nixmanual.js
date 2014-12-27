@@ -1274,16 +1274,19 @@ function changeFontsize(e)
  *****************************************************************************/
 function localeChange(location)
 {
+    debug('localChange: ' + location);
 	manpathPulldown = document.getElementById('remote_manpath');
 	document.getElementById('local').checked = (location == 0);
+	document.getElementById('remote').checked = !(location == 0);
+    
+    // Disable remote_manpath if we are on local.
+	manpathPulldown.disabled = (location == 0);
 
 	if(location == 0)
 	{
-		manpathPulldown.disabled = true;
 		document.getElementById('remote_settings').style.display = 'none';
 		document.getElementById('local_settings').style.display = 'block';
 	} else {
-		manpathPulldown.disabled = false;
 		document.getElementById('remote_settings').style.display = 'block';
 		document.getElementById('local_settings').style.display = 'none';
 	}
