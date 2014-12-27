@@ -265,3 +265,10 @@ H2 {
 	overflow: hidden;
     display:none;
 }
+.remote_settings{
+    width:190px; 
+    height: 20px;
+}
+.local_settings{
+    height: 20px;
+}
