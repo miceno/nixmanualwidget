@@ -150,20 +150,6 @@ body {
 	height:13px;
 }
 
-#flip {
-	opacity:100;
-	background: url(file:///System/Library/WidgetResources/ibutton/white_i.png) no-repeat top left;
-	z-index:8000;
-}
-
-#fliprollie {
-	display:none;
-	opacity:0.25;
-	background: url(file:///System/Library/WidgetResources/ibutton/white_rollie.png) no-repeat top left;
-	z-index:7999;
-
-}
-
 #back {
 	display: none;
 } 

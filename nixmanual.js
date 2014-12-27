@@ -460,14 +460,16 @@ function setup()
 	document.getElementById('SearchField').onblur = onBlur;
 
 	clicker = new DoubleClick( "selectionLookup();");
-
-	createGenericButton( document.getElementById('done'), 'Done', hidePrefs);
 	
 	document.getElementById('SearchField').focus();
 	document.getElementById('SearchField').select();
 
 	loadSearchPulldowns();
 	loadPrefs();
+    
+    gDoneButton = new AppleGlassButton(document.getElementById("done"), "Done", hidePrefs);
+    gInfoButton = new AppleInfoButton(document.getElementById("flip"), document.getElementById("front"), "white", "white", showPrefs);
+    
 }
 
 /******************************************************************************
@@ -1641,7 +1643,6 @@ function showPrefs()
 	if (window.widget)
 		setTimeout ('widget.performTransition();', 0);		// flip the widget
 
-	document.getElementById('fliprollie').style.display = 'none';
 	prefsVisible = true;
 }
 
@@ -1853,16 +1854,4 @@ function computeNextFloat (from, to, ease)
 {
     return from + (to - from) * ease;
 }
-
-// these functions are called when the info button itself receives mousee events
-function enterflip(event)
-{
-	document.getElementById('fliprollie').style.display = 'block';
-}
-
-function exitflip(event)
-{
-	document.getElementById('fliprollie').style.display = 'none';
-}
-
 
