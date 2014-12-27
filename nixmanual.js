@@ -1,29 +1,427 @@
 /******************************************************************************
- *                              *NIX manual 2.1
+ *                              *NIX manual 2.2
  *****************************************************************************/
 /******************************************************************************
  * Eben Eliason, http://www.interdimensionmedia.com					11/26/2007
+ * Orestes Sanchez, http://blog.estotienearreglo.es                 12/26/2014
  *****************************************************************************/
 
 name = "nixmanual";
-version = "2.1";
+version = "2.2";
+var debugMode = false;
+
+/*
+Uncomment this block for testing on a browser, since CORS limits access to
+external domains
+
+    var testResponseText = '<input name="apropos" value="0" type="radio" checked="checked" /> <a href="/cgi/man.cgi?query=man&amp;sektion=1&amp;apropos=0">Man</a>\
+    <select name="sektion">\
+    <option value="0">All Sections</option>\
+    <option value="1">1 - General Commands</option>\
+    <option value="2">2 - System Calls</option>\
+    <option value="3">3 - Subroutines</option>\
+    <option value="4">4 - Special Files</option>\
+    <option value="5">5 - File Formats</option>\
+    <option value="6">6 - Games</option>\
+    <option value="7">7 - Macros and Conventions</option>\
+    <option value="8">8 - Maintenance Commands</option>\
+    <option value="9">9 - Kernel Interface</option>\
+    <option value="n">n - New Commands</option>\
+    </select>\
+    <select name="manpath">\
+    <option value="2.8 BSD">2.8 BSD</option>\
+    <option value="2.9.1 BSD">2.9.1 BSD</option>\
+    <option value="2.10 BSD">2.10 BSD</option>\
+    <option value="2.11 BSD">2.11 BSD</option>\
+    <option value="4.3BSD NET/2">4.3BSD NET/2</option>\
+    <option value="4.3BSD Reno">4.3BSD Reno</option>\
+    <option value="4.4BSD Lite2">4.4BSD Lite2</option>\
+    <option value="386BSD 0.0">386BSD 0.0</option>\
+    <option value="386BSD 0.1">386BSD 0.1</option>\
+    <option value="CentOS 5.9">CentOS 5.9</option>\
+    <option value="CentOS 5.10">CentOS 5.10</option>\
+    <option value="CentOS 5.11">CentOS 5.11</option>\
+    <option value="CentOS 6.4">CentOS 6.4</option>\
+    <option value="CentOS 6.5">CentOS 6.5</option>\
+    <option value="CentOS 6.6">CentOS 6.6</option>\
+    <option value="CentOS 7.0">CentOS 7.0</option>\
+    <option value="CentOS Linux/amd64 5.6">CentOS Linux/amd64 5.6</option>\
+    <option value="CentOS Linux/amd64 5.7">CentOS Linux/amd64 5.7</option>\
+    <option value="CentOS Linux/amd64 5.8">CentOS Linux/amd64 5.8</option>\
+    <option value="CentOS Linux/amd64 6.0">CentOS Linux/amd64 6.0</option>\
+    <option value="CentOS Linux/amd64 6.1">CentOS Linux/amd64 6.1</option>\
+    <option value="CentOS Linux/amd64 6.2">CentOS Linux/amd64 6.2</option>\
+    <option value="CentOS Linux/amd64 6.3">CentOS Linux/amd64 6.3</option>\
+    <option value="CentOS Linux/i386 3.9">CentOS Linux/i386 3.9</option>\
+    <option value="CentOS Linux/i386 4.8">CentOS Linux/i386 4.8</option>\
+    <option value="CentOS Linux/i386 5.4">CentOS Linux/i386 5.4</option>\
+    <option value="CentOS Linux/i386 5.5">CentOS Linux/i386 5.5</option>\
+    <option value="Darwin 1.3.1/x86">Darwin 1.3.1/x86</option>\
+    <option value="Darwin 1.4.1/x86">Darwin 1.4.1/x86</option>\
+    <option value="Darwin 6.0.2/x86">Darwin 6.0.2/x86</option>\
+    <option value="Darwin 7.0.1">Darwin 7.0.1</option>\
+    <option value="Darwin 8.0.1/ppc">Darwin 8.0.1/ppc</option>\
+    <option value="Debian 6.0.10">Debian 6.0.10</option>\
+    <option value="Debian 7.7.0">Debian 7.7.0</option>\
+    <option value="FreeBSD 1.0-RELEASE">FreeBSD 1.0-RELEASE</option>\
+    <option value="FreeBSD 1.1-RELEASE">FreeBSD 1.1-RELEASE</option>\
+    <option value="FreeBSD 1.1.5.1-RELEASE">FreeBSD 1.1.5.1-RELEASE</option>\
+    <option value="FreeBSD 2.0-RELEASE">FreeBSD 2.0-RELEASE</option>\
+    <option value="FreeBSD 2.0.5-RELEASE">FreeBSD 2.0.5-RELEASE</option>\
+    <option value="FreeBSD 2.1.0-RELEASE">FreeBSD 2.1.0-RELEASE</option>\
+    <option value="FreeBSD 2.1.5-RELEASE">FreeBSD 2.1.5-RELEASE</option>\
+    <option value="FreeBSD 2.1.6.1-RELEASE">FreeBSD 2.1.6.1-RELEASE</option>\
+    <option value="FreeBSD 2.1.7.1-RELEASE">FreeBSD 2.1.7.1-RELEASE</option>\
+    <option value="FreeBSD 2.2.1-RELEASE">FreeBSD 2.2.1-RELEASE</option>\
+    <option value="FreeBSD 2.2.2-RELEASE">FreeBSD 2.2.2-RELEASE</option>\
+    <option value="FreeBSD 2.2.5-RELEASE">FreeBSD 2.2.5-RELEASE</option>\
+    <option value="FreeBSD 2.2.6-RELEASE">FreeBSD 2.2.6-RELEASE</option>\
+    <option value="FreeBSD 2.2.7-RELEASE">FreeBSD 2.2.7-RELEASE</option>\
+    <option value="FreeBSD 2.2.8-RELEASE">FreeBSD 2.2.8-RELEASE</option>\
+    <option value="FreeBSD 2.2.8-RELEASE and Ports">FreeBSD 2.2.8-RELEASE and Ports</option>\
+    <option value="FreeBSD 3.0-RELEASE">FreeBSD 3.0-RELEASE</option>\
+    <option value="FreeBSD 3.1-RELEASE">FreeBSD 3.1-RELEASE</option>\
+    <option value="FreeBSD 3.2-RELEASE">FreeBSD 3.2-RELEASE</option>\
+    <option value="FreeBSD 3.3-RELEASE">FreeBSD 3.3-RELEASE</option>\
+    <option value="FreeBSD 3.4-RELEASE">FreeBSD 3.4-RELEASE</option>\
+    <option value="FreeBSD 3.4-RELEASE and Ports">FreeBSD 3.4-RELEASE and Ports</option>\
+    <option value="FreeBSD 3.5-RELEASE and Ports">FreeBSD 3.5-RELEASE and Ports</option>\
+    <option value="FreeBSD 3.5.1-RELEASE">FreeBSD 3.5.1-RELEASE</option>\
+    <option value="FreeBSD 3.5.1-RELEASE and Ports">FreeBSD 3.5.1-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.0-RELEASE">FreeBSD 4.0-RELEASE</option>\
+    <option value="FreeBSD 4.1-RELEASE">FreeBSD 4.1-RELEASE</option>\
+    <option value="FreeBSD 4.1.1-RELEASE">FreeBSD 4.1.1-RELEASE</option>\
+    <option value="FreeBSD 4.1.1-RELEASE and Ports">FreeBSD 4.1.1-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.2-RELEASE">FreeBSD 4.2-RELEASE</option>\
+    <option value="FreeBSD 4.2-RELEASE and Ports">FreeBSD 4.2-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.3-RELEASE">FreeBSD 4.3-RELEASE</option>\
+    <option value="FreeBSD 4.3-RELEASE and Ports">FreeBSD 4.3-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.4-RELEASE">FreeBSD 4.4-RELEASE</option>\
+    <option value="FreeBSD 4.5-RELEASE">FreeBSD 4.5-RELEASE</option>\
+    <option value="FreeBSD 4.5-RELEASE and Ports">FreeBSD 4.5-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.6-RELEASE">FreeBSD 4.6-RELEASE</option>\
+    <option value="FreeBSD 4.6-RELEASE and Ports">FreeBSD 4.6-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.6.2-RELEASE">FreeBSD 4.6.2-RELEASE</option>\
+    <option value="FreeBSD 4.6.2-RELEASE and Ports">FreeBSD 4.6.2-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.7-RELEASE">FreeBSD 4.7-RELEASE</option>\
+    <option value="FreeBSD 4.8-RELEASE">FreeBSD 4.8-RELEASE</option>\
+    <option value="FreeBSD 4.8-RELEASE and Ports">FreeBSD 4.8-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.9-RELEASE">FreeBSD 4.9-RELEASE</option>\
+    <option value="FreeBSD 4.9-RELEASE and Ports">FreeBSD 4.9-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.10-RELEASE">FreeBSD 4.10-RELEASE</option>\
+    <option value="FreeBSD 4.10-RELEASE and Ports">FreeBSD 4.10-RELEASE and Ports</option>\
+    <option value="FreeBSD 4.11-RELEASE">FreeBSD 4.11-RELEASE</option>\
+    <option value="FreeBSD 4.11-RELEASE and Ports">FreeBSD 4.11-RELEASE and Ports</option>\
+    <option value="FreeBSD 5.0-RELEASE">FreeBSD 5.0-RELEASE</option>\
+    <option value="FreeBSD 5.1-RELEASE">FreeBSD 5.1-RELEASE</option>\
+    <option value="FreeBSD 5.2-RELEASE">FreeBSD 5.2-RELEASE</option>\
+    <option value="FreeBSD 5.2-RELEASE and Ports">FreeBSD 5.2-RELEASE and Ports</option>\
+    <option value="FreeBSD 5.2.1-RELEASE">FreeBSD 5.2.1-RELEASE</option>\
+    <option value="FreeBSD 5.2.1-RELEASE and Ports">FreeBSD 5.2.1-RELEASE and Ports</option>\
+    <option value="FreeBSD 5.3-RELEASE">FreeBSD 5.3-RELEASE</option>\
+    <option value="FreeBSD 5.3-RELEASE and Ports">FreeBSD 5.3-RELEASE and Ports</option>\
+    <option value="FreeBSD 5.4-RELEASE">FreeBSD 5.4-RELEASE</option>\
+    <option value="FreeBSD 5.4-RELEASE and Ports">FreeBSD 5.4-RELEASE and Ports</option>\
+    <option value="FreeBSD 5.5-RELEASE">FreeBSD 5.5-RELEASE</option>\
+    <option value="FreeBSD 5.5-RELEASE and Ports">FreeBSD 5.5-RELEASE and Ports</option>\
+    <option value="FreeBSD 6.0-RELEASE">FreeBSD 6.0-RELEASE</option>\
+    <option value="FreeBSD 6.0-RELEASE and Ports">FreeBSD 6.0-RELEASE and Ports</option>\
+    <option value="FreeBSD 6.1-RELEASE">FreeBSD 6.1-RELEASE</option>\
+    <option value="FreeBSD 6.2-RELEASE">FreeBSD 6.2-RELEASE</option>\
+    <option value="FreeBSD 6.3-RELEASE">FreeBSD 6.3-RELEASE</option>\
+    <option value="FreeBSD 6.3-RELEASE and Ports">FreeBSD 6.3-RELEASE and Ports</option>\
+    <option value="FreeBSD 6.4-RELEASE">FreeBSD 6.4-RELEASE</option>\
+    <option value="FreeBSD 6.4-RELEASE and Ports">FreeBSD 6.4-RELEASE and Ports</option>\
+    <option value="FreeBSD 6.4-stable">FreeBSD 6.4-stable</option>\
+    <option value="FreeBSD 7.0-RELEASE">FreeBSD 7.0-RELEASE</option>\
+    <option value="FreeBSD 7.1-RELEASE">FreeBSD 7.1-RELEASE</option>\
+    <option value="FreeBSD 7.1-RELEASE and Ports">FreeBSD 7.1-RELEASE and Ports</option>\
+    <option value="FreeBSD 7.2-RELEASE">FreeBSD 7.2-RELEASE</option>\
+    <option value="FreeBSD 7.2-RELEASE and Ports">FreeBSD 7.2-RELEASE and Ports</option>\
+    <option value="FreeBSD 7.3-RELEASE">FreeBSD 7.3-RELEASE</option>\
+    <option value="FreeBSD 7.3-RELEASE and Ports">FreeBSD 7.3-RELEASE and Ports</option>\
+    <option value="FreeBSD 7.4-RELEASE">FreeBSD 7.4-RELEASE</option>\
+    <option value="FreeBSD 7.4-RELEASE and Ports">FreeBSD 7.4-RELEASE and Ports</option>\
+    <option value="FreeBSD 7.4-stable">FreeBSD 7.4-stable</option>\
+    <option value="FreeBSD 8.0-RELEASE">FreeBSD 8.0-RELEASE</option>\
+    <option value="FreeBSD 8.0-RELEASE and Ports">FreeBSD 8.0-RELEASE and Ports</option>\
+    <option value="FreeBSD 8.1-RELEASE">FreeBSD 8.1-RELEASE</option>\
+    <option value="FreeBSD 8.1-RELEASE and Ports">FreeBSD 8.1-RELEASE and Ports</option>\
+    <option value="FreeBSD 8.2-RELEASE">FreeBSD 8.2-RELEASE</option>\
+    <option value="FreeBSD 8.2-RELEASE and Ports">FreeBSD 8.2-RELEASE and Ports</option>\
+    <option value="FreeBSD 8.3-RELEASE">FreeBSD 8.3-RELEASE</option>\
+    <option value="FreeBSD 8.3-RELEASE and Ports">FreeBSD 8.3-RELEASE and Ports</option>\
+    <option value="FreeBSD 8.4-RELEASE">FreeBSD 8.4-RELEASE</option>\
+    <option value="FreeBSD 8.4-RELEASE and Ports">FreeBSD 8.4-RELEASE and Ports</option>\
+    <option value="FreeBSD 8.4-stable">FreeBSD 8.4-stable</option>\
+    <option value="FreeBSD 9.0-RELEASE">FreeBSD 9.0-RELEASE</option>\
+    <option value="FreeBSD 9.0-RELEASE and Ports">FreeBSD 9.0-RELEASE and Ports</option>\
+    <option value="FreeBSD 9.1-RELEASE">FreeBSD 9.1-RELEASE</option>\
+    <option value="FreeBSD 9.1-RELEASE and Ports">FreeBSD 9.1-RELEASE and Ports</option>\
+    <option value="FreeBSD 9.2-RELEASE">FreeBSD 9.2-RELEASE</option>\
+    <option value="FreeBSD 9.2-RELEASE and Ports">FreeBSD 9.2-RELEASE and Ports</option>\
+    <option value="FreeBSD 9.3-RELEASE">FreeBSD 9.3-RELEASE</option>\
+    <option value="FreeBSD 9.3-RELEASE and Ports">FreeBSD 9.3-RELEASE and Ports</option>\
+    <option value="FreeBSD 9.3-stable">FreeBSD 9.3-stable</option>\
+    <option value="FreeBSD 10.0-RELEASE">FreeBSD 10.0-RELEASE</option>\
+    <option value="FreeBSD 10.0-stable">FreeBSD 10.0-stable</option>\
+    <option selected="selected" value="FreeBSD 10.1-RELEASE">FreeBSD 10.1-RELEASE</option>\
+    <option value="FreeBSD 10.1-RELEASE and Ports">FreeBSD 10.1-RELEASE and Ports</option>\
+    <option value="FreeBSD 10.1-stable">FreeBSD 10.1-stable</option>\
+    <option value="FreeBSD 11-current">FreeBSD 11-current</option>\
+    <option value="FreeBSD Ports 2.2.8-RELEASE">FreeBSD Ports 2.2.8-RELEASE</option>\
+    <option value="FreeBSD Ports 3.4-RELEASE">FreeBSD Ports 3.4-RELEASE</option>\
+    <option value="FreeBSD Ports 3.5-RELEASE">FreeBSD Ports 3.5-RELEASE</option>\
+    <option value="FreeBSD Ports 3.5.1-RELEASE">FreeBSD Ports 3.5.1-RELEASE</option>\
+    <option value="FreeBSD Ports 4.1.1-RELEASE">FreeBSD Ports 4.1.1-RELEASE</option>\
+    <option value="FreeBSD Ports 4.2-RELEASE">FreeBSD Ports 4.2-RELEASE</option>\
+    <option value="FreeBSD Ports 4.3-RELEASE">FreeBSD Ports 4.3-RELEASE</option>\
+    <option value="FreeBSD Ports 4.5-RELEASE">FreeBSD Ports 4.5-RELEASE</option>\
+    <option value="FreeBSD Ports 4.6-RELEASE">FreeBSD Ports 4.6-RELEASE</option>\
+    <option value="FreeBSD Ports 4.6.2-RELEASE">FreeBSD Ports 4.6.2-RELEASE</option>\
+    <option value="FreeBSD Ports 4.7-RELEASE">FreeBSD Ports 4.7-RELEASE</option>\
+    <option value="FreeBSD Ports 4.8-RELEASE">FreeBSD Ports 4.8-RELEASE</option>\
+    <option value="FreeBSD Ports 4.9-RELEASE">FreeBSD Ports 4.9-RELEASE</option>\
+    <option value="FreeBSD Ports 4.10-RELEASE">FreeBSD Ports 4.10-RELEASE</option>\
+    <option value="FreeBSD Ports 4.11-RELEASE">FreeBSD Ports 4.11-RELEASE</option>\
+    <option value="FreeBSD Ports 5.1-RELEASE">FreeBSD Ports 5.1-RELEASE</option>\
+    <option value="FreeBSD Ports 5.2-RELEASE">FreeBSD Ports 5.2-RELEASE</option>\
+    <option value="FreeBSD Ports 5.2.1-RELEASE">FreeBSD Ports 5.2.1-RELEASE</option>\
+    <option value="FreeBSD Ports 5.3-RELEASE">FreeBSD Ports 5.3-RELEASE</option>\
+    <option value="FreeBSD Ports 5.4-RELEASE">FreeBSD Ports 5.4-RELEASE</option>\
+    <option value="FreeBSD Ports 5.5-RELEASE">FreeBSD Ports 5.5-RELEASE</option>\
+    <option value="FreeBSD Ports 6.0-RELEASE">FreeBSD Ports 6.0-RELEASE</option>\
+    <option value="FreeBSD Ports 6.2-RELEASE">FreeBSD Ports 6.2-RELEASE</option>\
+    <option value="FreeBSD Ports 6.3-RELEASE">FreeBSD Ports 6.3-RELEASE</option>\
+    <option value="FreeBSD Ports 6.4-RELEASE">FreeBSD Ports 6.4-RELEASE</option>\
+    <option value="FreeBSD Ports 7.0-RELEASE">FreeBSD Ports 7.0-RELEASE</option>\
+    <option value="FreeBSD Ports 7.1-RELEASE">FreeBSD Ports 7.1-RELEASE</option>\
+    <option value="FreeBSD Ports 7.2-RELEASE">FreeBSD Ports 7.2-RELEASE</option>\
+    <option value="FreeBSD Ports 7.3-RELEASE">FreeBSD Ports 7.3-RELEASE</option>\
+    <option value="FreeBSD Ports 7.4-RELEASE">FreeBSD Ports 7.4-RELEASE</option>\
+    <option value="FreeBSD Ports 8.0-RELEASE">FreeBSD Ports 8.0-RELEASE</option>\
+    <option value="FreeBSD Ports 8.1-RELEASE">FreeBSD Ports 8.1-RELEASE</option>\
+    <option value="FreeBSD Ports 8.2-RELEASE">FreeBSD Ports 8.2-RELEASE</option>\
+    <option value="FreeBSD Ports 8.3-RELEASE">FreeBSD Ports 8.3-RELEASE</option>\
+    <option value="FreeBSD Ports 8.4-RELEASE">FreeBSD Ports 8.4-RELEASE</option>\
+    <option value="FreeBSD Ports 9.0-RELEASE">FreeBSD Ports 9.0-RELEASE</option>\
+    <option value="FreeBSD Ports 9.1-RELEASE">FreeBSD Ports 9.1-RELEASE</option>\
+    <option value="FreeBSD Ports 9.2-RELEASE">FreeBSD Ports 9.2-RELEASE</option>\
+    <option value="FreeBSD Ports 9.3-RELEASE">FreeBSD Ports 9.3-RELEASE</option>\
+    <option value="FreeBSD Ports 10.0-RELEASE">FreeBSD Ports 10.0-RELEASE</option>\
+    <option value="FreeBSD Ports 10.1-RELEASE">FreeBSD Ports 10.1-RELEASE</option>\
+    <option value="HP-UX 10.01">HP-UX 10.01</option>\
+    <option value="HP-UX 10.10">HP-UX 10.10</option>\
+    <option value="HP-UX 10.20">HP-UX 10.20</option>\
+    <option value="HP-UX 11.00">HP-UX 11.00</option>\
+    <option value="HP-UX 11.11">HP-UX 11.11</option>\
+    <option value="HP-UX 11.20">HP-UX 11.20</option>\
+    <option value="HP-UX 11.22">HP-UX 11.22</option>\
+    <option value="Linux Slackware 3.1">Linux Slackware 3.1</option>\
+    <option value="Minix 2.0">Minix 2.0</option>\
+    <option value="NetBSD 1.0">NetBSD 1.0</option>\
+    <option value="NetBSD 1.1">NetBSD 1.1</option>\
+    <option value="NetBSD 1.2">NetBSD 1.2</option>\
+    <option value="NetBSD 1.2.1">NetBSD 1.2.1</option>\
+    <option value="NetBSD 1.3">NetBSD 1.3</option>\
+    <option value="NetBSD 1.3.1">NetBSD 1.3.1</option>\
+    <option value="NetBSD 1.3.2">NetBSD 1.3.2</option>\
+    <option value="NetBSD 1.3.3">NetBSD 1.3.3</option>\
+    <option value="NetBSD 1.4">NetBSD 1.4</option>\
+    <option value="NetBSD 1.4.1">NetBSD 1.4.1</option>\
+    <option value="NetBSD 1.4.2">NetBSD 1.4.2</option>\
+    <option value="NetBSD 1.4.3">NetBSD 1.4.3</option>\
+    <option value="NetBSD 1.5">NetBSD 1.5</option>\
+    <option value="NetBSD 1.5.1">NetBSD 1.5.1</option>\
+    <option value="NetBSD 1.5.2">NetBSD 1.5.2</option>\
+    <option value="NetBSD 1.5.3">NetBSD 1.5.3</option>\
+    <option value="NetBSD 1.6">NetBSD 1.6</option>\
+    <option value="NetBSD 1.6.1">NetBSD 1.6.1</option>\
+    <option value="NetBSD 1.6.2">NetBSD 1.6.2</option>\
+    <option value="NetBSD 2.0">NetBSD 2.0</option>\
+    <option value="NetBSD 2.0.2">NetBSD 2.0.2</option>\
+    <option value="NetBSD 2.1">NetBSD 2.1</option>\
+    <option value="NetBSD 3.0">NetBSD 3.0</option>\
+    <option value="NetBSD 3.1">NetBSD 3.1</option>\
+    <option value="NetBSD 4.0">NetBSD 4.0</option>\
+    <option value="NetBSD 4.0.1">NetBSD 4.0.1</option>\
+    <option value="NetBSD 5.0">NetBSD 5.0</option>\
+    <option value="NetBSD 5.1">NetBSD 5.1</option>\
+    <option value="NetBSD 6.0">NetBSD 6.0</option>\
+    <option value="NetBSD 6.1.5">NetBSD 6.1.5</option>\
+    <option value="OpenBSD 2.0">OpenBSD 2.0</option>\
+    <option value="OpenBSD 2.1">OpenBSD 2.1</option>\
+    <option value="OpenBSD 2.2">OpenBSD 2.2</option>\
+    <option value="OpenBSD 2.3">OpenBSD 2.3</option>\
+    <option value="OpenBSD 2.4">OpenBSD 2.4</option>\
+    <option value="OpenBSD 2.5">OpenBSD 2.5</option>\
+    <option value="OpenBSD 2.6">OpenBSD 2.6</option>\
+    <option value="OpenBSD 2.7">OpenBSD 2.7</option>\
+    <option value="OpenBSD 2.8">OpenBSD 2.8</option>\
+    <option value="OpenBSD 2.9">OpenBSD 2.9</option>\
+    <option value="OpenBSD 3.0">OpenBSD 3.0</option>\
+    <option value="OpenBSD 3.1">OpenBSD 3.1</option>\
+    <option value="OpenBSD 3.2">OpenBSD 3.2</option>\
+    <option value="OpenBSD 3.3">OpenBSD 3.3</option>\
+    <option value="OpenBSD 3.4">OpenBSD 3.4</option>\
+    <option value="OpenBSD 3.5">OpenBSD 3.5</option>\
+    <option value="OpenBSD 3.6">OpenBSD 3.6</option>\
+    <option value="OpenBSD 3.7">OpenBSD 3.7</option>\
+    <option value="OpenBSD 3.8">OpenBSD 3.8</option>\
+    <option value="OpenBSD 3.9">OpenBSD 3.9</option>\
+    <option value="OpenBSD 4.0">OpenBSD 4.0</option>\
+    <option value="OpenBSD 4.1">OpenBSD 4.1</option>\
+    <option value="OpenBSD 4.2">OpenBSD 4.2</option>\
+    <option value="OpenBSD 4.3">OpenBSD 4.3</option>\
+    <option value="OpenBSD 4.4">OpenBSD 4.4</option>\
+    <option value="OpenBSD 4.5">OpenBSD 4.5</option>\
+    <option value="OpenBSD 4.6">OpenBSD 4.6</option>\
+    <option value="OpenBSD 4.7">OpenBSD 4.7</option>\
+    <option value="OpenBSD 4.8">OpenBSD 4.8</option>\
+    <option value="OpenBSD 4.9">OpenBSD 4.9</option>\
+    <option value="OpenBSD 5.0">OpenBSD 5.0</option>\
+    <option value="OpenBSD 5.1">OpenBSD 5.1</option>\
+    <option value="OpenBSD 5.2">OpenBSD 5.2</option>\
+    <option value="OpenBSD 5.3">OpenBSD 5.3</option>\
+    <option value="OpenBSD 5.4">OpenBSD 5.4</option>\
+    <option value="OpenBSD 5.5">OpenBSD 5.5</option>\
+    <option value="OpenBSD 5.6">OpenBSD 5.6</option>\
+    <option value="OpenDarwin 6.6.1/x86">OpenDarwin 6.6.1/x86</option>\
+    <option value="OpenDarwin 6.6.2/x86">OpenDarwin 6.6.2/x86</option>\
+    <option value="OpenDarwin 7.2.1">OpenDarwin 7.2.1</option>\
+    <option value="OpenDarwin 20030208pre4/ppc">OpenDarwin 20030208pre4/ppc</option>\
+    <option value="OSF1 V4.0/alpha">OSF1 V4.0/alpha</option>\
+    <option value="OSF1 V5.1/alpha">OSF1 V5.1/alpha</option>\
+    <option value="Plan 9">Plan 9</option>\
+    <option value="Red Hat Linux/i386 4.2">Red Hat Linux/i386 4.2</option>\
+    <option value="Red Hat Linux/i386 5.0">Red Hat Linux/i386 5.0</option>\
+    <option value="Red Hat Linux/i386 5.2">Red Hat Linux/i386 5.2</option>\
+    <option value="Red Hat Linux/i386 6.1">Red Hat Linux/i386 6.1</option>\
+    <option value="Red Hat Linux/i386 6.2">Red Hat Linux/i386 6.2</option>\
+    <option value="Red Hat Linux/i386 7.0">Red Hat Linux/i386 7.0</option>\
+    <option value="Red Hat Linux/i386 7.1">Red Hat Linux/i386 7.1</option>\
+    <option value="Red Hat Linux/i386 7.2">Red Hat Linux/i386 7.2</option>\
+    <option value="Red Hat Linux/i386 7.3">Red Hat Linux/i386 7.3</option>\
+    <option value="Red Hat Linux/i386 8.0">Red Hat Linux/i386 8.0</option>\
+    <option value="Red Hat Linux/i386 9">Red Hat Linux/i386 9</option>\
+    <option value="SunOS 4.1.3">SunOS 4.1.3</option>\
+    <option value="SunOS 5.5.1">SunOS 5.5.1</option>\
+    <option value="SunOS 5.6">SunOS 5.6</option>\
+    <option value="SunOS 5.7">SunOS 5.7</option>\
+    <option value="SunOS 5.8">SunOS 5.8</option>\
+    <option value="SunOS 5.9">SunOS 5.9</option>\
+    <option value="SunOS 5.10">SunOS 5.10</option>\
+    <option value="SuSE Linux/i386 4.3">SuSE Linux/i386 4.3</option>\
+    <option value="SuSE Linux/i386 5.0">SuSE Linux/i386 5.0</option>\
+    <option value="SuSE Linux/i386 5.2">SuSE Linux/i386 5.2</option>\
+    <option value="SuSE Linux/i386 5.3">SuSE Linux/i386 5.3</option>\
+    <option value="SuSE Linux/i386 6.0">SuSE Linux/i386 6.0</option>\
+    <option value="SuSE Linux/i386 6.1">SuSE Linux/i386 6.1</option>\
+    <option value="SuSE Linux/i386 6.3">SuSE Linux/i386 6.3</option>\
+    <option value="SuSE Linux/i386 6.4">SuSE Linux/i386 6.4</option>\
+    <option value="SuSE Linux/i386 7.0">SuSE Linux/i386 7.0</option>\
+    <option value="SuSE Linux/i386 7.1">SuSE Linux/i386 7.1</option>\
+    <option value="SuSE Linux/i386 7.2">SuSE Linux/i386 7.2</option>\
+    <option value="SuSE Linux/i386 7.3">SuSE Linux/i386 7.3</option>\
+    <option value="SuSE Linux/i386 8.0">SuSE Linux/i386 8.0</option>\
+    <option value="SuSE Linux/i386 8.1">SuSE Linux/i386 8.1</option>\
+    <option value="SuSE Linux/i386 8.2">SuSE Linux/i386 8.2</option>\
+    <option value="SuSE Linux/i386 9.2">SuSE Linux/i386 9.2</option>\
+    <option value="SuSE Linux/i386 9.3">SuSE Linux/i386 9.3</option>\
+    <option value="SuSE Linux/i386 10.0">SuSE Linux/i386 10.0</option>\
+    <option value="SuSE Linux/i386 10.1">SuSE Linux/i386 10.1</option>\
+    <option value="SuSE Linux/i386 10.2">SuSE Linux/i386 10.2</option>\
+    <option value="SuSE Linux/i386 10.3">SuSE Linux/i386 10.3</option>\
+    <option value="SuSE Linux/i386 11.0">SuSE Linux/i386 11.0</option>\
+    <option value="SuSE Linux/i386 11.1">SuSE Linux/i386 11.1</option>\
+    <option value="SuSE Linux/i386 11.2">SuSE Linux/i386 11.2</option>\
+    <option value="SuSE Linux/i386 11.3">SuSE Linux/i386 11.3</option>\
+    <option value="SuSE Linux/i386 ES 10 SP1">SuSE Linux/i386 ES 10 SP1</option>\
+    <option value="ULTRIX 4.2">ULTRIX 4.2</option>\
+    <option value="Unix Seventh Edition">Unix Seventh Edition</option>\
+    <option value="X11R6.7.0">X11R6.7.0</option>\
+    <option value="X11R6.8.2">X11R6.8.2</option>\
+    <option value="X11R6.9.0">X11R6.9.0</option>\
+    <option value="X11R7.2">X11R7.2</option>\
+    <option value="X11R7.3.2">X11R7.3.2</option>\
+    <option value="X11R7.4">X11R7.4</option>\
+    <option value="XFree86 2.1">XFree86 2.1</option>\
+    <option value="XFree86 3.3">XFree86 3.3</option>\
+    <option value="XFree86 3.3.6">XFree86 3.3.6</option>\
+    <option value="XFree86 4.0">XFree86 4.0</option>\
+    <option value="XFree86 4.0.1">XFree86 4.0.1</option>\
+    <option value="XFree86 4.0.2">XFree86 4.0.2</option>\
+    <option value="XFree86 4.1.0">XFree86 4.1.0</option>\
+    <option value="XFree86 4.2.0">XFree86 4.2.0</option>\
+    <option value="XFree86 4.2.99.3">XFree86 4.2.99.3</option>\
+    <option value="XFree86 4.3.0">XFree86 4.3.0</option>\
+    <option value="XFree86 4.4.0">XFree86 4.4.0</option>\
+    <option value="XFree86 4.5.0">XFree86 4.5.0</option>\
+    <option value="XFree86 4.6.0">XFree86 4.6.0</option>\
+    <option value="XFree86 4.7.0">XFree86 4.7.0</option>\
+    </select>\
+    <select name="arch">\
+    <option  value="default">default</option>\
+    <option  value="amd64">amd64</option>\
+    <option  value="arm">arm</option>\
+    <option  value="i386">i386</option>\
+    <option  value="powerpc">powerpc</option>\
+    <option  value="sparc64">sparc64</option>\
+    </select>\
+    Architecture\
+    \
+    <br />\
+    <input name="apropos" value="1" type="radio" /> <a href="/cgi/man.cgi?query=apropos&amp;sektion=1&amp;apropos=0">Apropos</a> Keyword Search (all sections)\
+    <select name="format">\
+    <option value="html">html</option>\
+    <option value="pdf">pdf</option>\
+    <option value="ascii">ascii</option>\
+    </select>\
+    '
+*/
 
 /******************************************************************************
  * super simple debug function to work with Dashboard & Safari
  * debugging output can be viwed in the Console (Applications/Utilities)
  *****************************************************************************/
-function debug(s)
+function debug(str)
 {
-	// document.getElementById('debug').innerText = s;
-	// alert(s);
-    DEBUG(s);
+    // Write to the debug div when running in a browser.
+    // Send a simple alert to Console when in Dashboard.
+	if (debugMode) {
+        if (!window.widget) {
+            console.debug(str);
+        }
+        else
+		{
+			var debugDiv = document.getElementById('debugDiv');
+			debugDiv.appendChild(document.createTextNode(str));
+			debugDiv.appendChild(document.createElement("br"));
+			debugDiv.scrollTop = debugDiv.scrollHeight;
+		}
+	}
 }
+
+// Toggle the debugMode flag, but only show the debugDiv in Safari
+function toggleDebug() {
+    // debugMode = !debugMode;
+	if (debugMode == true && window.widget) {
+		document.getElementById('debugDiv').style.display = 'block';
+	} else {
+		document.getElementById('debugDiv').style.display = 'none';
+	}
+}
+
 
 /******************************************************************************
  * initialize variables
  *****************************************************************************/
 function setup()
 {		
+    // Activate debug
+    toggleDebug();
+    
+    // TODO: avoid global variables.
     key = null;
     modifier = null;
 	timer = null;
@@ -61,7 +459,7 @@ function setup()
 	document.getElementById('SearchField').onfocus = onFocus;
 	document.getElementById('SearchField').onblur = onBlur;
 
-	clicker = new DoubleClick( "selectionLookup()");
+	clicker = new DoubleClick( "selectionLookup();");
 
 	createGenericButton( document.getElementById('done'), 'Done', hidePrefs);
 	
@@ -82,31 +480,58 @@ function loadSearchPulldowns()
 	req = new XMLHttpRequest();
 	url = "http://www.freebsd.org/cgi/man.cgi";
     req.open("GET", url ,false);
-    req.send(null);
-	if(req.responseText)
-	{
-        debug("responseText");
-		response = req.responseText;
-			
-		start = response.indexOf("<select name=\"sektion\">") + 23;
-		end = response.indexOf("<select name=\"manpath\">") - 10;
-        // debug( "sekction string: " + response.substring(start, end));
-		sectionHTML = "<select id='section' onchange=\"selectSection(this.options[this.selectedIndex].value);document.getElementById('SearchField').focus();document.getElementById('SearchField').select();\">" + response.substring(start, end);
-		sectionHTML += "<OPTION VALUE='k'>k - Keyword Search (apropos)</OPTION>";
-		
-		start = end;
-		end = response.indexOf("<input name=\"apropos\" value=\"1");
-        // debug( "apropos string: " + response.substring(start, end));
-		manpathHTML = "<select id='remote_manpath'>" + response.substring(start, end);
-			
-		document.getElementById('sectiondiv').innerHTML = sectionHTML;
-		document.getElementById('manpathdiv').innerHTML = manpathHTML;
-	} else {
+    
+    // TODO: make local the default action.
+    
+    // In case there is no connection we switch to local lookups.
+    try{
+
+        req.send(null);
+        response = req.responseText;
+
+        // Uncomment this line for testing.
+        // response = testResponseText;
+    	if(response)
+    	{
+            debug("responseText");
+            
+            // Build a dummy DOM object to hold the HTML from the server
+            var dummyDoc = new DOMParser().parseFromString(response, 'text/html');
+            debug("dummyDoc");
+            
+            // Get the sektion
+            var sektion = dummyDoc.getElementsByName('sektion')[0];
+            debug("sektion");
+            var APROPOS_OPTION = "<OPTION VALUE='k'>k - Keyword Search (apropos)</OPTION>";
+            sektion.innerHTML = sektion.innerHTML + APROPOS_OPTION;
+            debug("sektion innerHTML: " + sektion.innerHTML);
+            
+            // Get manpath
+            var manpathElement = dummyDoc.getElementsByName('manpath')[0];            
+
+    		document.getElementById('section').innerHTML = sektion.innerHTML;
+    		document.getElementById('remote_manpath').innerHTML = manpathElement.innerHTML;
+    	} else {
+            debug("no responseText");
+    		displayStatus("<b>No internet connection detected.  Lookups will default to the local man pages.</b>", 0);
+    		expand_collapse();
+    		runLocally();
+    	}
+    }
+    catch (err){
+        debug('error on loading external resource: ' + url);
         debug("no responseText");
 		displayStatus("<b>No internet connection detected.  Lookups will default to the local man pages.</b>", 0);
 		expand_collapse();
 		runLocally();
-	}
+    }
+    document.getElementById('section').onchange = function(event){
+        debug('section onchange');
+        selectSection(event.target.options[event.target.selectedIndex].value);
+        document.getElementById('SearchField').focus();
+        document.getElementById('SearchField').select();
+    };
+
 }
 
 function selectSection(section)
@@ -152,7 +577,7 @@ function displayHelp()
 	
 	document.getElementById('manualtext').innerHTML = response;
 	
-	//alert(document.getElementById('manualtext').innerHTML);	
+	//debug(document.getElementById('manualtext').innerHTML);	
 }
 
 // replace spaces with '+' for searching
@@ -194,7 +619,7 @@ function expand_collapse()
 {
 	if(resizing) return;
 	
-	if(document.getElementById('function').innerText === '') return;
+	if(document.getElementById('function').innerText == '') return;
 	
 	document.getElementById('tab').style.display = "block";
 	document.getElementById('SearchField').focus();
@@ -264,6 +689,7 @@ function processRequest(q,linked) {
 	//check for skip-format flag
 	if(q.match(/-i /))
 	{
+        debug("skipFormatting");
 		skipFormatting = true;
 		q = q.replace("-i ", " ");
 	} else
@@ -272,6 +698,7 @@ function processRequest(q,linked) {
 	//handle request for *NIX manual help pages
 	if(q == 'help' || q == 'nixmanual')
 	{	
+        debug("help");
 		query = q;
 		searchID = 'help';		
 		displayHelp();
@@ -281,6 +708,7 @@ function processRequest(q,linked) {
 	//handle subsearch mode when active
 	else if(subsearch)
 	{
+        debug("subsearch");
 		if(q)
 			highlightKeyword(q);
 		else 
@@ -296,6 +724,7 @@ function processRequest(q,linked) {
 	//standard search
 	else if(q)
 	{
+        debug("preparing the query");
 		linkedPage = linked;
 		query = q;
 		
@@ -325,10 +754,27 @@ function processRequest(q,linked) {
 		}
 		*/
 		
-		manpathPulldown = document.getElementById('remote_manpath');
-		manpath = manpathPulldown[manpathPulldown.selectedIndex].value;
-		locale  = manpathPulldown.disabled === true;
-		
+		locale  = manpathPulldown.disabled == true;
+        debug("locale: " + locale);
+        manpath = "";
+		if(locale){
+            /* Local lookup parameters */
+			localeCommand = "localLookup('";
+        }
+		else{
+            /* Remote lookup parameters */
+			localeCommand = "remoteLookup('";
+    		manpathPulldown = document.getElementById('remote_manpath');
+            debug("manpathPulldown: " + manpathPulldown);
+            var manpathPulldownSelectedIndex = manpathPulldown.selectedIndex;
+            debug("manpathPulldown index: " + manpathPulldownSelectedIndex);
+            if (manpathPulldownSelectedIndex < 0)
+                manpathPulldownSelectedIndex = 0;
+            debug("manpathPulldown index: " + manpathPulldownSelectedIndex);
+    		manpath = manpathPulldown[manpathPulldownSelectedIndex].value;
+        }
+        debug("manpath: " + manpath);
+        		
 		newID = query  + apropos + section + manpath + locale;
 		
 		//perform search only when not already displayed
@@ -341,16 +787,11 @@ function processRequest(q,linked) {
 				displayStatus("<b>Performing keyword search for '</b><i>" + query + "</i><b>'...</b>", true);
 			else
 				displayStatus("<b>Loading manual entry for '</b><i>" + query + "</i><b>'...</b>", true);
-			
-			if(locale)
-				locale = "localLookup('";
-			else
-				locale = "remoteLookup('";
-			
+						
 			newSearch = true;  //?
 			setTabText(query);
 			
-			lookupString = locale + query + "', " + apropos + ", '" + section + "', '" + manpath + "')";
+			lookupString = localeCommand + query + "', " + apropos + ", '" + section + "', '" + manpath + "')";
 			//alert(lookupString);
 			setTimeout(lookupString, 0);
 			
@@ -417,7 +858,7 @@ function loadPageFromFile()
 	req.open("GET", "nixmanpage.txt" ,false);
 	req.send(null);
 	
-	if(req.responseText === '')
+	if(req.responseText == '')
 		response = 'No manual entry';
 	else
 	{
@@ -483,7 +924,7 @@ function doneLocalLookup(s)
 function killLocalLookup()
 {
 	//keep the portion of the manpage already loaded
-	s = command.outpoutString;
+	s = command.outputString;
 	
 	//cancel the lookup
 	command.cancel();
@@ -524,9 +965,9 @@ function remoteLookup(q,a,s,m)
 	req = new XMLHttpRequest();
 	url = "http://www.freebsd.org/cgi/man.cgi?query=" + q + (a ? "&apropos=true" : "") + "&sektion=" + s + "&manpath=" + m + "&format=html";
 	debug(url);
+	req.onreadystatechange = doneRemoteLookup;
 	req.open("GET", url ,true);
 	//req.setRequestHeader("Cache-Control", "no-cache");
-	req.onreadystatechange = doneRemoteLookup;
 	req.send(null);
 }
 
@@ -629,8 +1070,13 @@ function linkLookup(q, s)
 		document.getElementById("SearchField").value = query;
 		
 		document.getElementById("manualtext").innerHTML = "<br><br><br><br><br><br><br><br><br><table width=100%'><tr><td align='center'><b>Loading manual entry for '</b><i>" + query + "</i><b>'...</b></td></tr><tr><td align='center'><img src='Images/progress.gif' width='115' height='10'></td></tr></table>";
-				
-		setTimeout("remoteLookup('" + query + "', 0, '" + section + "', 'FreeBSD+5.3+RELEASE+and+Ports')", 5);
+		
+        // TODO: Get current manpath
+        selectedManPath = manpath; // 'FreeBSD+5.3+RELEASE+and+Ports';
+        // var queryString = "remoteLookup('" + query + "', 0, '" + section + "', selectedManPath)";
+        // debug("linkLookup: " + queryString);
+        remoteLookup(query, 0, section, selectedManPath);
+		// setTimeout(queryString, 5);
 	}
 	//refocus the search field
 	document.getElementById('SearchField').focus();
@@ -644,11 +1090,13 @@ function linkLookup(q, s)
 function selectionLookup()
 {
 	selectedText = window.getSelection();
-	if(selectedText !== '')
+	if(selectedText != '')
 	{	
 		query = selectedText;
 		document.getElementById('SearchField').value = query;
-		setTimeout("processRequest('"+query+"', 0)", 0);
+        var queryString = "processRequest('"+query+"')";
+        debug(queryString);
+		setTimeout(queryString, 0);
 	}
 }
 
@@ -657,7 +1105,7 @@ function selectionLookup()
  *****************************************************************************/
 function highlightKeyword(word, force)
 {
-	if(force || highlightedKeyword != word && word !== '')
+	if(force || highlightedKeyword != word && word != '')
 	{
 		re = new RegExp('((\<[ib]\>)*'+word+'(\<\\[ib]\>)*)', 'gi');
 		debug(re);
@@ -827,9 +1275,9 @@ function changeFontsize(e)
 function localeChange(location)
 {
 	manpathPulldown = document.getElementById('remote_manpath');
-	document.getElementById('local').checked = (location === 0);
+	document.getElementById('local').checked = (location == 0);
 
-	if(location === 0)
+	if(location == 0)
 	{
 		manpathPulldown.disabled = true;
 		document.getElementById('remote_settings').style.display = 'none';
@@ -879,7 +1327,7 @@ function parseColorset(e)
 {
 	colorset = e[e.selectedIndex].value;
 	
-	if(colorset === "")
+	if(colorset == "")
 		colorset = loadCustomColorset();
 	
 	eval("applyColorset(" + colorset + ");");
@@ -967,10 +1415,12 @@ function formatHex(s)
  * search field focus trackers
  *****************************************************************************/
 function onFocus(event) {
+    debug('onFocus');
 	searchFocus = true;
 }
 
 function onBlur(event) {
+    debug('onBlur');
 	searchFocus = false;
 }
 
@@ -979,28 +1429,22 @@ function onBlur(event) {
  *****************************************************************************/
 function interpretKeypress(e)
 {
-	if(window.widget)
-	{	
-		key = e.keyCode;
-		modifier = modifierKey(e);
-		
-		if(interpretKey(500, 20, e))
-		{
-			e.stopPropagation();
-			e.preventDefault();
-		}
+	key = e.keyCode;
+	modifier = modifierKey(e);
+	
+	if(interpretKey(500, 20, e))
+	{
+		e.stopPropagation();
+		e.preventDefault();
 	}
 }
 
 function interpretKeyrelease(e)
 {
-	if(window.widget)
-	{
-		key = null;
-	
-		if(timer)
-			clearTimeout(timer);
-	}
+	key = null;
+
+	if(timer)
+		clearTimeout(timer);
 }
 
 function modifierKey(e)
@@ -1009,14 +1453,12 @@ function modifierKey(e)
 }
 
 function interpretKey(delay, speed, e) {
-			
-	//alert("key pressed");
-	
-	if(window.widget && key)
-	{
-		//alert(key);
-		
+				
+	debug('keypressed: ' + key);
+    if(key)
+	{		
 		if(document.getElementById("front").style.display == 'none') {
+    		debug('front is none');
 			setTimeout("updateSwatches();",5);
 		} else {
 			switch(key) {
@@ -1057,7 +1499,9 @@ function interpretKey(delay, speed, e) {
 						}
 						break;
 				//enter
-				case 13:if(!searchFocus && !prefsVisible)
+				case 13:
+                    debug('searchfocus: '+ searchFocus + ', prefsVisible:' + prefsVisible);
+                    if(!searchFocus && !prefsVisible)
 						{
 							selectionLookup();
 							highlightKeyword(highlightedKeyword);
@@ -1065,7 +1509,7 @@ function interpretKey(delay, speed, e) {
 						}
 						break;
 				//(sublookup: / )
-				case 191:if(searchID !== '')
+				case 191:if(searchID != '')
 						{
 							subsearch = true;
 							
@@ -1205,9 +1649,9 @@ function hidePrefs()
 	
     try{
     	if (window.widget) {
+            debug("transicion...");
     		savePrefs();
     		widget.prepareForTransition("ToFront");		// freezes the widget
-            debug("transicion...");
     	}
 	
     	back.style.display="none";			// hide the back
@@ -1224,52 +1668,59 @@ function hidePrefs()
         
     }
     catch (err){
-        debug("error: " + err.message);
+        debug("error while hidePrefs: " + err.message);
     }
 }
 
 function loadPrefs()
 {
-	colorsetIndex = widget.preferenceForKey('colorsetIndex');
-	fontIndex = widget.preferenceForKey('fontIndex');
-	fontsizeIndex = widget.preferenceForKey('fontsizeIndex');
-	sectionIndex = widget.preferenceForKey('sectionIndex');
-	manpathIndex = widget.preferenceForKey('manpathIndex');
-	manpath = widget.preferenceForKey('manpath');
-	locale = widget.preferenceForKey('locale');
-	autodefault = widget.preferenceForKey('autodefault');
-	opacity = widget.preferenceForKey('opacity');
-	windowHeight = widget.preferenceForKey('windowHeight');
-	
-	if(colorsetIndex)
-	{
+    // Only get preferences from plist files if we are running on the 
+    // Dashboard environment.
+    if(window.widget){
+    	colorsetIndex = widget.preferenceForKey('colorsetIndex');
+    	fontIndex = widget.preferenceForKey('fontIndex');
+    	fontsizeIndex = widget.preferenceForKey('fontsizeIndex');
+    	sectionIndex = widget.preferenceForKey('sectionIndex');
+    	manpathIndex = widget.preferenceForKey('manpathIndex');
+    	manpath = widget.preferenceForKey('manpath');
+    	locale = widget.preferenceForKey('locale');
+    	autodefault = widget.preferenceForKey('autodefault');
+    	opacity = widget.preferenceForKey('opacity');
+    	windowHeight = widget.preferenceForKey('windowHeight');
+    	if(colorsetIndex)
+    	{	
+    		document.getElementById('background').style.opacity = opacity/100;
+    		document.getElementById('opacity').value = opacity;
+    		document.getElementById('colorset').selectedIndex = parseInt(colorsetIndex);
+    		document.getElementById('fontface').selectedIndex = parseInt(fontIndex);
+    		document.getElementById('fontsize').selectedIndex = parseInt(fontsizeIndex);
+    		document.getElementById('section').selectedIndex = parseInt(sectionIndex);
+    		if(sectionIndex && document.getElementById('section'))
+    			selectSection(document.getElementById('section').options[sectionIndex].value);
+    		if(!runLocal && manpathIndex)
+    			document.getElementById('remote_manpath').selectedIndex = parseInt(manpathIndex);
+    		if(manpath)
+    			document.getElementById('local_manpath').value = manpath;
 		
-		document.getElementById('background').style.opacity = opacity/100;
-		document.getElementById('opacity').value = opacity;
-		document.getElementById('colorset').selectedIndex = parseInt(colorsetIndex);
-		document.getElementById('fontface').selectedIndex = parseInt(fontIndex);
-		document.getElementById('fontsize').selectedIndex = parseInt(fontsizeIndex);
-		document.getElementById('section').selectedIndex = parseInt(sectionIndex);
-		if(sectionIndex && document.getElementById('section'))
-			selectSection(document.getElementById('section').options[sectionIndex].value);
-		if(!runLocal && manpathIndex)
-			document.getElementById('remote_manpath').selectedIndex = parseInt(manpathIndex);
-		if(manpath)
-			document.getElementById('local_manpath').value = manpath;
+    		localeChange((locale) ? 0 : 1);
 		
-		localeChange((locale) ? 0 : 1);
+    		document.getElementById('autodefault').checked = (autodefault) ? 1 : 0;
 		
-		document.getElementById('autodefault').checked = (autodefault) ? 1 : 0;
+    		parseColorset(document.getElementById('colorset'));
+    		changeFont(document.getElementById('fontface'));
 		
-		parseColorset(document.getElementById('colorset'));
-		changeFont(document.getElementById('fontface'));
-		
-		updateSwatches();
-		changeFontsize(document.getElementById('fontsize'));
+    		updateSwatches();
+    		changeFontsize(document.getElementById('fontsize'));
+    	} else {
+    		document.getElementById('colorset').selectedIndex = 5;
+    		parseColorset(document.getElementById('colorset'));
+    	}
 	} else {
 		document.getElementById('colorset').selectedIndex = 5;
 		parseColorset(document.getElementById('colorset'));
 	}
+	
+
 }
 
 function savePrefs()
@@ -1317,7 +1768,7 @@ function mousemove (event)
 	if (!flipShown)		// if the preferences flipper is not already showing...
 	{
 		//reset the timer
-		if (animation.timer !== null)
+		if (animation.timer != null)
 		{
 			clearInterval (animation.timer);
 			animation.timer  = null;
@@ -1345,7 +1796,7 @@ function mouseexit (event)
 	if (flipShown)
 	{
 		// fade in the flip widget
-		if (animation.timer !== null)
+		if (animation.timer != null)
 		{
 			clearInterval (animation.timer);
 			animation.timer  = null;
@@ -1410,4 +1861,5 @@ function exitflip(event)
 {
 	document.getElementById('fliprollie').style.display = 'none';
 }
+
 

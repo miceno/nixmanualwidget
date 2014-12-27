@@ -46,50 +46,6 @@
 
 </style>
 
-<style type="text/css">
-	#debugDiv {
-		border-style: dotted;
-		border-color: black;
-		background: gray;
-		position: absolute;
-		top: 35px;
-		left: 0px;
-		height: 200px;
-		width: 90%;
-		overflow: hidden;
-/*		display:none;*/
-	}
-</style>
-<script language="JavaScript" type="text/javascript">
-var debugMode = true;
-
-// Write to the debug div when in Safari.
-// Send a simple alert to Console when in Dashboard.
-function DEBUG(str) {
-	if (debugMode) {
-		// if (!window.widget) {
-		// 	alert(str);
-		// }
-		// else
-		{
-			var debugDiv = document.getElementById('debugDiv');
-			debugDiv.appendChild(document.createTextNode(str));
-			debugDiv.appendChild(document.createElement("br"));
-			debugDiv.scrollTop = debugDiv.scrollHeight;
-		}
-	}
-}
-
-// Toggle the debugMode flag, but only show the debugDiv in Safari
-function toggleDebug() {
-	debugMode = !debugMode;
-	if (debugMode == true && !window.widget) {
-		document.getElementById('debugDiv').style.display = 'block';
-	} else {
-		document.getElementById('debugDiv').style.display = 'none';
-	}
-}
-</script>
 <script type='text/javascript' src='file:///System/Library/WidgetResources/button/genericButton.js'></script>
 <script type='text/javascript' src="doubleclick.js"></script>
 <script type='text/javascript' src="prototype.js"></script>
@@ -110,13 +66,10 @@ function toggleDebug() {
 		<div class='flip' id='flip' onclick='showPrefs(event);' onmouseover='enterflip(event);' onmouseout='exitflip(event)';></div>
 		
 		<div id='header'>
-		<div id="debugDiv">
-			depurando...
-		</div>
 			<img src="Images/extender.png" width="100%" height="35px" onclick='expand_collapse();'>
 			
 			<div id='section_label'>•</div>
-			<div id='sectiondiv' style='position: absolute; top: 6px; right: 155px; opacity: 0;'>
+			<div id='sectiondiv' style='position: absolute; top: 6px; right: 175px; opacity: 0;'>
 				<SELECT id="section" onchange="selectSection(this.options[this.selectedIndex].value);document.getElementById('SearchField').focus();document.getElementById('SearchField').select();">
 					<OPTION VALUE="0">All Sections</OPTION>
 					<OPTION VALUE="1">1 - General Commands</OPTION>
@@ -136,6 +89,9 @@ function toggleDebug() {
 			<div id="searchbar" height="150">
            		<input id='SearchField' type="search" size="18" placeholder="command" autosave="recentPages" results="7" onSearch="processRequest(this.value,0)"/>
         	</div>
+			<div id="debugDiv">
+				depurando...
+			</div>
         
         	<div id="tab" class='tab'>
         		<img src="Images/tab.png">
@@ -213,8 +169,8 @@ function toggleDebug() {
 					<td><img width='20'></td>
 					<td align='left' rowspan='5'>
 						Search Locale:
-						<input type='radio' name='locale' id='local' value='0' onclick='javascript: localeChange(0);' tabindex='12'>Local</input>
-						<input type='radio' name='locale' id='remote' value='1' onclick='javascript: localeChange(1);' checked tabindex='13'>Remote</input>
+						<input type='radio' name='locale' id='local' value='0' onclick='javascript: localeChange(0);' checked tabindex='12'>Local</input>
+						<input type='radio' name='locale' id='remote' value='1' onclick='javascript: localeChange(1);' tabindex='13'>Remote</input>
 						<input type='checkbox' id='autodefault' tabindex='14'>Default to other locale on failure</input><br><br>
 						
 						<div id='remote_settings'>
@@ -225,7 +181,7 @@ function toggleDebug() {
 								</SELECT>
 							</div>
 						</div>
-						<div id='local_settings' style='display: none;'>
+						<div id='local_settings'>
 							Path:<br>
 							<div id='manpathdiv' style='height: 20px;'>
 								<INPUT id="local_manpath" class='dark_input' type='text' tabindex='16' value='/usr/share/man:/usr/local/share/man:/usr/local/man:/usr/X11/man'>
